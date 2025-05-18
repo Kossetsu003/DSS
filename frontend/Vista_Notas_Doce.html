@@ -28,14 +28,14 @@
     </style>
 </head>
 <body>
-<div class="flex flex-col h-screen bg-gray-100">
+<div class="flex flex-col h-screen ">
 
     <!-- Barra de navegación superior -->
-    <div class="bg-white text-white shadow w-full p-2 flex items-center justify-between">
+    <div class="bg-gray-100 text-white shadow w-full p-2 flex items-center justify-between">
         <div class="flex items-center">
             <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
                
-                <h2 class="font-bold text-xl">Nombre de la Aplicación</h2>
+                <h2 class="font-bold text-xl text-gray-500">Nombre de la Aplicación</h2>
             </div>
             <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
                 <button id="menuBtn">
@@ -44,22 +44,14 @@
             </div>
         </div>
 
-        <!-- Ícono de Notificación y Perfil -->
         <div class="space-x-5">
-            <button>
-                
-            </button>
-            <!-- Botón de Perfil -->
-            <button>
-                
-            </button>
         </div>
     </div>
 
     <!-- Contenido principal -->
     <div class="flex-1 flex">
         <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
-        <div class="p-2 bg-white w-60 flex flex-col hidden md:flex" id="sideNav">
+        <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
             <nav>
                 <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
                     <i class="fas fa-users mr-2"></i>Asignar prueba
@@ -73,13 +65,13 @@
                 <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
                     <i class="fas fa-users mr-2"></i>Crear grupo
                 </a>
-               
-            </nav>
-
-            <!-- Ítem de Cerrar Sesión -->
-            <a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white mt-auto" href="#">
+                <!-- Ítem de Cerrar Sesión -->
+            <a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
                 <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
             </a>
+            </nav>
+
+
 
             <!-- Señalador de ubicación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
@@ -91,20 +83,35 @@
 
         <!-- Área de contenido principal -->
         <div class="flex-1 p-4">
-            <!-- Campo de búsqueda -->
-            
-
-            <!-- Contenedor de las 4 secciones (disminuido para dispositivos pequeños) -->
+           
+              <!-- component -->
+<div class="transition-colors duration-300">
+    <div class="container mx-auto p-4">
+        <div class="bg-white  shadow rounded-lg p-6">
+            <h1 class="text-xl font-semibold mb-4 text-gray-900 ">FactuEdu</h1>
+            <!-- Option -->
+            <p class="text-gray-600  mb-6">Seleccione una sección</p>
+            <form>
+                 <div class="mb-4">
+                    <select class="border p-2 rounded w-full">
+                        <option>Seccion 3B</option>
+                        <option>Seccion 3A</option>
+                        
+                    </select>
+                </div>
+                <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
+                    Guardar 
+                </button>
+            </form>
+        </div>
+    </div>
+  </div>
+        
+            <!-- Contenedor) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
-                <!-- Sección 1 - Gráfica de Usuarios (disminuida para dispositivos-->
+               
             
-               <!-- Sección 1 - Gráfica de Usuarios -->
-                    
-
-                    <!-- Sección 2 - Gráfica de Comercios -->
-                    
-
-                    <!-- Sección 3 - Tabla de Autorizaciones Pendientes (disminuida para dispositivos pequeños) -->
+            
             <div class="bg-white p-4 rounded-md">
                 <h2 class="text-gray-500 text-lg font-semibold pb-4">Calificaciones Credito fiscal 3 A</h2>
                 <div class="my-1"></div> <!-- Espacio de separación -->
@@ -116,8 +123,40 @@
                             <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Nombre</th>
                             <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Calificaciones</th>
                         </tr>
+                    
+     
                     </thead>
                     <tbody>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
+                        </tr>
                         <tr class="hover:bg-grey-lighter">
                             <td class="py-2 px-4 border-b border-grey-light">013125</td>
                             <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
@@ -129,9 +168,7 @@
                     </table>
                     <!-- Botón "Ver más" para la tabla de Autorizaciones Pendientes -->
                     <div class="text-right mt-4">
-                        <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-                            Ver más
-                        </button>
+                    
                     </div>
                 </div>
 
