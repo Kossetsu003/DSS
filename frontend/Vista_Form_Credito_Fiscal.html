@@ -83,7 +83,189 @@
         </div>
             <!-- Contenido principal -->
 
+<form id="cf" class="mx-auto w-full max-w-4xl rounded-lg bg-white p-6 shadow">
+    <!-- 1. Encabezado / Emisor ------------------------------------------------>
+    <header class="grid gap-4 md:grid-cols-3 md:gap-6 border-b pb-4">
+      <!-- Logo y giro -->
+      <div class="col-span-2 flex flex-col items-center text-center">
+        <img src="logo.png" alt="Logo" class="h-20 object-contain mb-2">
+        <h1 class="text-lg font-semibold">Dolores Cerón De Esquivel</h1>
+        <p class="text-sm leading-snug">
+          Dirección: Calle El Milagro&nbsp;km&nbsp;27, Cton. El Cimarrón&nbsp;#1,
+          La Libertad, La Libertad.<br>
+          Giro: Venta al por menor de prendas de vestir y accesorios.
+        </p>
+      </div>
+      <!-- Numeración -->
+      <div class="flex flex-col items-center justify-center border rounded">
+        <p class="font-semibold">COMPROBANTE CRÉDITO FISCAL</p>
+        <p class="text-4xl font-bold text-red-600 tracking-widest">No. <span id="corr">0001</span></p>
+        <p class="text-sm">N.R.C.: 311001-0<br>NIT.: 1102-011074-102-5</p>
+      </div>
+    </header>
 
+    <!-- 2. Datos del cliente y operación ------------------------------------->
+    <section class="mt-4 space-y-2 text-sm">
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col">
+          Cliente
+          <input name="cliente" class="input" required>
+        </label>
+        <label class="flex flex-col">
+          Fecha
+          <input type="date" name="fecha" class="input" required>
+        </label>
+      </div>
+
+      <label class="flex flex-col">
+        Dirección
+        <input name="dir-cliente" class="input">
+      </label>
+
+      <div class="grid gap-4 md:grid-cols-4">
+        <label class="flex flex-col md:col-span-2">
+          Municipio
+          <input name="municipio" class="input">
+        </label>
+        <label class="flex flex-col">
+          Depto.
+          <input name="depto" class="input">
+        </label>
+        <label class="flex flex-col">
+          NIT
+          <input name="nit-cliente" class="input">
+        </label>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-4">
+        <label class="flex flex-col">
+          Registro No.
+          <input name="registro-cliente" class="input">
+        </label>
+        <label class="flex flex-col">
+          Giro
+          <input name="giro-cliente" class="input">
+        </label>
+        <label class="flex flex-col">
+          No. Nota de Remisión Anterior
+          <input name="nota-previa" class="input">
+        </label>
+        <label class="flex flex-col">
+          Fecha Nota
+          <input type="date" name="fecha-nota" class="input">
+        </label>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-3">
+        <label class="flex items-center gap-2">
+          Condición de la operación
+          <input name="cond-op" class="input w-32">
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="radio" name="pago" value="contado" class="radio">
+          Contado
+        </label>
+        <label class="flex items-center gap-2">
+          <input type="radio" name="pago" value="credito" class="radio">
+          Crédito
+        </label>
+      </div>
+
+      <label class="flex flex-col">
+        Venta a cta. de
+        <input name="cta-de" class="input">
+      </label>
+    </section>
+
+    <!-- 3. Detalle de bienes/servicios --------------------------------------->
+    <section class="mt-6">
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-800 text-white">
+              <th class="px-1 py-1 w-14">CANT</th>
+              <th class="px-1 py-1">DESCRIPCIÓN</th>
+              <th class="px-1 py-1 w-28">PRECIO UNITARIO</th>
+              <th class="px-1 py-1 w-24">VTAS. NO SUJETAS</th>
+              <th class="px-1 py-1 w-24">VENTAS EXENTAS</th>
+              <th class="px-1 py-1 w-24">VENTAS GRAVADAS</th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <tr>
+              <td><input name="cant[]" type="number" min="0" class="input-xs w-full text-center"></td>
+              <td><input name="desc[]" class="input-xs w-full"></td>
+              <td><input name="pu[]" type="number" min="0" step="any" class="input-xs w-full text-right"></td>
+              <td><input name="no_suj[]" type="number" min="0" step="any" class="input-xs w-full text-right"></td>
+              <td><input name="exentas[]" type="number" min="0" step="any" class="input-xs w-full text-right"></td>
+              <td><input name="gravadas[]" type="number" min="0" step="any" class="input-xs w-full text-right"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" id="add" class="mt-2 rounded bg-blue-600 px-3 py-1 text-white">Añadir línea</button>
+    </section>
+
+    <!-- 4. Totales ----------------------------------------------------------->
+    <section class="mt-6 grid gap-1 text-sm md:grid-cols-2">
+      <label class="flex items-center gap-2">
+        SON:
+        <input name="son" class="flex-1 input">
+      </label>
+
+      <div class="border rounded p-3 space-y-1">
+        <div class="flex justify-between">
+          <span>Sumas</span><input name="sumas" readonly class="input-total">
+        </div>
+        <div class="flex justify-between">
+          <span>13 % IVA</span><input name="iva" readonly class="input-total">
+        </div>
+        <div class="flex justify-between font-semibold">
+          <span>Sub-Total</span><input name="subtotal" readonly class="input-total">
+        </div>
+        <div class="flex justify-between">
+          <span>Menos IVA Retenido 1 %</span><input name="ret-iva" readonly class="input-total">
+        </div>
+        <div class="flex justify-between">
+          <span>Ventas Exentas</span><input name="tot-exentas" readonly class="input-total">
+        </div>
+        <div class="flex justify-between">
+          <span>Ventas no Sujetas</span><input name="tot-nosuj" readonly class="input-total">
+        </div>
+        <div class="flex justify-between font-bold text-lg">
+          <span>Venta Total</span><input name="total" readonly class="input-total">
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. C/C y firmas ------------------------------------------------------>
+    <section class="mt-6 text-xs">
+      <label class="block font-semibold">
+        C/C:&nbsp;&nbsp;<span class="italic">Llenar si la operación es superior a $ 11,428.58</span>
+      </label>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2 text-sm">
+        <div class="border rounded p-3 space-y-2">
+          <p class="font-medium border-b pb-1">ENTREGADO POR:</p>
+          <label class="flex flex-col">Nombre<input class="input"></label>
+          <label class="flex flex-col">DUI<input class="input"></label>
+          <label class="flex flex-col">Firma<input class="input"></label>
+        </div>
+        <div class="border rounded p-3 space-y-2">
+          <p class="font-medium border-b pb-1">RECIBIDO POR:</p>
+          <label class="flex flex-col">Nombre<input class="input"></label>
+          <label class="flex flex-col">DUI<input class="input"></label>
+          <label class="flex flex-col">Firma<input class="input"></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Botones ----------------------------------------------------------->
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="reset" class="rounded border px-4 py-2">Limpiar</button>
+      <button type="submit" class="rounded bg-green-600 px-6 py-2 text-white">Guardar</button>
+    </div>
+  </form>
             <!-- Fin del contenido-->
         
             </div>
