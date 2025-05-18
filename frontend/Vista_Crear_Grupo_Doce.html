@@ -47,22 +47,21 @@
         <div class="space-x-5">
         </div>
     </div>
-
     <!-- Contenido principal -->
     <div class="flex-1 flex">
         <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
         <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
             <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Select_Prueba_Doce.html">
                     <i class="fas fa-users mr-2"></i>Asignar prueba
                 </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificar_Doce.html">
                     <i class="fas fa-file-alt mr-2"></i>Calificar
                 </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Notas_Doce.html">
                      <i class="fas fa-file-alt mr-2"></i>Ver notas 
                 </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="#">
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Crear_Grupo_Doce.html">
                     <i class="fas fa-users mr-2"></i>Crear grupo
                 </a>
                 <!-- Ítem de Cerrar Sesión -->
@@ -92,24 +91,22 @@
             <!-- Option -->
             
             <form>
-                 <!-- Option seccion -->
-                <p class="text-gray-600  mb-6">Seleccione una seccion</p>
+                 <!-- Input datos -->
+                <p class="text-gray-600  mb-6">Escriba El nombre de la seccion</p>
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <input type="text" placeholder="First name" class="border p-2 rounded w-full">
-                    <input type="text" placeholder="Last name" class="border p-2 rounded w-full">
+                    <input type="text" placeholder="Nombre de la seccion" class="border p-2 rounded w-full">
                 </div>
-                 <!-- Option Prueba -->
-                <p class="text-gray-600  mb-6">Seleccione una prueba</p>
-                <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                        <option>Credico fiscal</option>
-                        <option>Cliente final</option>
-                        
-                    </select>
+               <p class="text-gray-600  mb-6">Escriba El año de la seccion</p>
+               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <input type="text" placeholder="El año de la seccion" class="border p-2 rounded w-full">
                 </div>
+                    
                  <!-- Button Guardar-->
                 <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
-                    Guardar 
+                    Ingresar 
+                </button>
+                <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 focus:outline-none transition-colors">
+                    Guardado 
                 </button>
             </form>
         </div>
@@ -122,7 +119,7 @@
             
             
             <div class="bg-white p-4 rounded-md">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Credito fiscal 3 A</h2>
+                <h2 class="text-gray-500 text-lg font-semibold pb-4">Credito fiscal 3A</h2>
                 <div class="my-1"></div> <!-- Espacio de separación -->
                 <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
                 <table class="w-full table-auto text-sm">
@@ -130,23 +127,22 @@
                         <tr class="text-sm leading-normal">
                             <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Carnet</th>
                             <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Nombre</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Calificar</th>
-                        </tr>
+                           
                     
      
                     </thead>
                     <tbody>
                         <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center"><a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-green-400 hover:to-green-300 hover:text-white mt-auto" href="#">Calificar</a></td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">013125</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">Juan Pérez</td>
+                            
                         </tr>
                                                 <!-- Añade más filas aquí como la anterior-->
                       
                     </tbody>
                     </table>
                     <div class="p-2">
-                        <a class="block  py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-cyan-300 hover:text-white mt-auto text-center" href="#">Listo</a>
+                        <a class="block  py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-orange-600 hover:to-orange-300 hover:text-white mt-auto text-center" href="#">Matricular Usuario</a>
                     </div>
                 </div>
 
