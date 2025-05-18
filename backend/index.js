@@ -4,6 +4,14 @@ const PORT = 3000;
 
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
+
 app.get('/', (req, res) => {
   res.send('¡Servidor funcionando con Express!');
 });
