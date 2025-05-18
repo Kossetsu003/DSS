@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <title>Document</title>
+</head>
+<body>
+    <!-- component -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Agregar estilos para la vista de dispositivos pequeños */
+        @media (max-width: 768px) {
+            .flex-wrap {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .section-small {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="flex flex-col h-screen bg-gray-100">
+
+    <!-- Barra de navegación superior -->
+    <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
+        <div class="flex items-center">
+            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
+               
+                <h2 class="font-bold text-xl">FactuEdu</h2>
+            </div>
+            <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
+                <button id="menuBtn">
+                    <i class="fas fa-bars text-gray-500 text-lg"></i> <!-- Ícono de menú -->
+                </button>
+            </div>
+        </div>
+
+        <!-- Ícono de Notificación y Perfil -->
+        <div class="space-x-5">
+            <button>
+                
+            </button>
+            <!-- Botón de Perfil -->
+            <button>
+                
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="flex-1 flex">
+        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
+        <div class="p-2 bg-white w-60 flex flex-col hidden md:flex" id="sideNav">
+            <nav>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Prueba_Asig_Alu.html">
+                    <i class="fas fa-users mr-2"></i>Pruebas asignadas
+                </a>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificacion_Alu.html">
+                    <i class="fas fa-file-alt mr-2"></i>Calificacion
+                </a>
+               <a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
+                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+            </a>
+            </nav>
+
+            
+
+            <!-- Señalador de ubicación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+
+            <!-- Copyright al final de la navegación lateral -->
+            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
+
+        </div>
+
+
+
+
+            <!-- Contenido principal -->
+
+<form class="mx-auto w-full max-w-4xl bg-white p-6 shadow-lg rounded-md">
+    <!-- 1. Encabezado / Emisor -->
+    <header class="grid gap-4 md:grid-cols-3 items-center border-b pb-4">
+      <!-- Logo + nombre -->
+      <div class="col-span-2 flex items-center space-x-4">
+        <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 object-contain">
+        <div>
+          <h1 class="text-2xl font-semibold">Factu <span class="italic">Edu</span></h1>
+          <p class="text-sm">Sergio Enrique Valencia Rosales</p>
+          <p class="text-xs">
+            Dirección: 9° Calle Ote. 2° Av. Norte, Barrio Dolores #46, Izalco, Sonsonate<br>
+            Giro: Alojamiento N.C.P.<br>
+            Teléfono: 7096-9464    correo: UDB@gmail.com
+          </p>
+        </div>
+      </div>
+      <!-- Numeración / Factura -->
+      <div class="flex flex-col items-center border rounded-lg p-3 bg-gray-50">
+        <p class="font-semibold">FACTURA</p>
+        <p class="text-4xl font-bold text-red-600">No. 0001</p>
+        <p class="text-xs text-center">N.R.C.: 294712-1  NIT: 0306-071266-101-5</p>
+      </div>
+    </header>
+
+    <!-- 2. Fecha -->
+    <section class="mt-4 grid grid-cols-3 gap-2 text-sm">
+      <label class="flex flex-col">
+        Día
+        <input type="number" min="1" max="31"
+               class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                      focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+      </label>
+      <label class="flex flex-col">
+        Mes
+        <input type="number" min="1" max="12"
+               class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                      focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+      </label>
+      <label class="flex flex-col">
+        Año
+        <input type="number" min="2000" max="2100"
+               class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                      focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+      </label>
+    </section>
+
+    <!-- 3. Datos cliente -->
+    <section class="mt-4 space-y-2 text-sm">
+      <div class="grid gap-4 md:grid-cols-2">
+        <label class="flex flex-col">
+          Nombre
+          <input class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        </label>
+        <label class="flex flex-col">
+          D.U.I. o N.I.T.
+          <input class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        </label>
+      </div>
+      <div>
+        <label class="flex flex-col">
+          Dirección
+          <input class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        </label>
+      </div>
+      <div>
+        <label class="flex flex-col">
+          Venta a cuenta de
+          <input class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        </label>
+      </div>
+    </section>
+
+    <!-- 4. Detalle de bienes/servicios -->
+    <section class="mt-6">
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="border px-1 py-1 w-14">CANT.</th>
+              <th class="border px-1 py-1">D E S C R I P C I Ó N</th>
+              <th class="border px-1 py-1 w-28">PRECIO UNITARIO</th>
+              <th class="border px-1 py-1 w-24">VENTAS NO SUJ.</th>
+              <th class="border px-1 py-1 w-24">VENTAS EXENTAS</th>
+              <th class="border px-1 py-1 w-24">VENTAS GRAVADAS</th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <tr>
+              <td><input type="number" min="0"
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+              <td><input
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+              <td><input type="number" min="0" step="any"
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+              <td><input type="number" min="0" step="any"
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+              <td><input type="number" min="0" step="any"
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+              <td><input type="number" min="0" step="any"
+                  class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs
+                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button type="button" id="add"
+              class="mt-2 rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700">
+        Añadir línea
+      </button>
+    </section>
+
+    <!-- 5. Totales y SON / C/C -->
+    <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <label class="flex flex-col">
+          SON:
+          <input class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1
+                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        </label>
+        <label class="flex items-center mt-2 text-xs italic">
+          C/C:&nbsp;Llenar si la operación es igual o superior a $200.00
+        </label>
+      </div>
+
+      <div class="border rounded p-3 space-y-1">
+        <div class="flex justify-between">
+          <span>SUMAS</span>
+          <input readonly
+            class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+        </div>
+        <div class="flex justify-between">
+          <span>VENTA EXENTA</span>
+          <input readonly
+            class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+        </div>
+        <div class="flex justify-between">
+          <span>VENTA NO SUJETA</span>
+          <input readonly
+            class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+        </div>
+        <div class="flex justify-between">
+          <span>(-) IVA RETENIDO</span>
+          <input readonly
+            class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+        </div>
+        <div class="flex justify-between font-bold">
+          <span>VENTA TOTAL</span>
+          <input readonly
+            class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Firmas -->
+    <section class="mt-6 text-xs">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="border rounded p-3 space-y-2">
+          <p class="font-medium border-b pb-1 text-center">ENTREGADO POR:</p>
+          <label class="flex flex-col">NOMBRE:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+          <label class="flex flex-col">DUI:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+          <label class="flex flex-col">FIRMA:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+        </div>
+        <div class="border rounded p-3 space-y-2">
+          <p class="font-medium border-b pb-1 text-center">RECIBIDO POR:</p>
+          <label class="flex flex-col">NOMBRE:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+          <label class="flex flex-col">DUI:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+          <label class="flex flex-col">FIRMA:
+            <input class="mt-1 rounded border border-gray-400 bg-white px-2 py-1
+                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Pie de página -->
+    <footer class="mt-6 text-[10px] text-center text-gray-600">
+      <p>HECHO POR: ________   REVISADO POR: ________   AUTORIZADO POR: ________</p>
+      <p class="mt-2">
+        IMPRESOS “JG”: (Luis Ernesto Flamenco), NIT: 0315-280394-104-7, N.R.C.: 257235-0 Calle a San Antonio del Monte, Bo. San Francisco, #4-2, Sonsonate, Tel.: 2451-4158. No. de Autorización Imprenta: 1191, Fecha de Autorización: 09/11/2020. Fecha de Impresión: 12/2020 No. de Resolución: 15041-RES-IN-55206-2020. Tiraje: 20ST000F1 al 20ST000F250.
+      </p>
+      <p class="mt-1">Original – Emisor   Duplicado – Cliente</p>
+    </footer>
+
+     <!-- 8. Botones -->
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="submit" class="rounded bg-green-600 px-6 py-2 text-white">Guardar</button>
+    </div>
+  </form>
+
+  <script>
+    // duplicar fila de detalle
+    document.getElementById('add').onclick = () => {
+      const tr = document.querySelector('#rows tr').cloneNode(true);
+      tr.querySelectorAll('input').forEach(i => i.value = '');
+      document.getElementById('rows').appendChild(tr);
+    };
+  </script>
+
+            <!-- Fin del contenido-->
+        
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
+</body>
+</html>
