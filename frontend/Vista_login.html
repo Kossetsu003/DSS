@@ -18,7 +18,7 @@
                         <label for="" class="block mt-3 text-sm text-gray-700 text-center font-semibold">
                             Login
                         </label>
-                        <form method="#" action="#" class="mt-10">
+                        <form  id="loginForm" method="#" action="#" class="mt-10">
                                            
                             <div>
                                 <input type="text" id="carnet" placeholder="Carnet" class="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
@@ -66,4 +66,40 @@
             
         </div>
 </body>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Evita que recargue la página
+
+    const carnet = document.getElementById('carnet').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          carnet: carnet,
+          password: password
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('Login exitoso');
+        localStorage.setItem('rol', result.rol);
+        window.location.href = '/perfil.html';
+      } else {
+        alert(result.message || 'Error al iniciar sesión');
+      }
+
+    } catch (error) {
+      console.error('Error en login:', error);
+      alert('No se pudo conectar al servidor.');
+    }
+  });
+</script>
+
 </html>
