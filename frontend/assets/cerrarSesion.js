@@ -1,5 +1,5 @@
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  fetch('http://localhost:3000/logout', {
+  fetch('http://localhost:4000/logout', {
     method: 'POST',
     credentials: 'include'
   })

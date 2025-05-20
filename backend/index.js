@@ -84,7 +84,7 @@ app.post('/logout', (req, res) => {
       console.error('Error al cerrar sesión:', err);
       return res.status(500).json({ mensaje: 'Error al cerrar sesión' });
     }
-    res.clearCookie('connect.sid'); // Limpia la cookie de sesión
+    res.clearCookie('connect.sid');
     res.json({ mensaje: 'Sesión cerrada correctamente' });
   });
 });
