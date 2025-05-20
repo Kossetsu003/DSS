@@ -6,6 +6,5 @@ async function checkLogin() {
   if (!res.ok) {
     window.location.href = '/DSS/frontend/Vista_login.html';
   }
-  console.log(res.json());
 }
 checkLogin();

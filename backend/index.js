@@ -27,13 +27,6 @@ app.use(session({
   }
 }));
 
-function requireLogin(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'No estás autenticado' });
-  }
-  next();
-}
-
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
@@ -77,6 +70,14 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Error del servidor' });
   }
 });
+
+function requireLogin(req, res, next) {
+  console.log(req.session.user);
+  if (!req.session.user) {
+    return res.status(401).json({ error: 'No estás autenticado' });
+  }
+  next();
+}
 
 app.post('/logout', (req, res) => {
   req.session.destroy(err => {
