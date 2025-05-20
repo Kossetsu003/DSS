@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(session({
-  secret: 'una_clave_muy_segura',
+  secret: 'DpMbh0gC3RAoN3G',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -76,4 +76,15 @@ app.post('/login', async (req, res) => {
     console.error('Error en /login:', err);
     res.status(500).json({ message: 'Error del servidor' });
   }
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return res.status(500).json({ mensaje: 'Error al cerrar sesión' });
+    }
+    res.clearCookie('connect.sid'); // Limpia la cookie de sesión
+    res.json({ mensaje: 'Sesión cerrada correctamente' });
+  });
 });
