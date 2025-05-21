@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td class="py-2 px-4 border-b border-grey-light text-center">
             <button
               data-seccion="${id}"
-              data-alumno="${a.id}"
+              data-alumno="${a.codigo}"
               class="eliminar-btn px-2 py-1 bg-red-500 text-white rounded">
               Eliminar
             </button>
@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('eliminar-btn')) {
             const secId = e.target.getAttribute('data-seccion');
             const alumnoId = e.target.getAttribute('data-alumno');
-
             const confirmacion = confirm('¿Estás seguro de que quieres eliminar este alumno de la sección?');
             if (!confirmacion) return;
 

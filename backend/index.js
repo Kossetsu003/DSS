@@ -198,11 +198,11 @@ app.delete('/secciones/:id/integrantes/:alumnoId', async (req, res) => {
     const pool = await poolPromise;
     await pool.request()
       .input('id_seccion', sql.Int, alumnoId ? parseInt(id) : null)
-      .input('id_alumno', sql.Int, alumnoId ? parseInt(alumnoId) : null)
+      .input('id_alumno', sql.VarChar, alumnoId)
       .query(`
         DELETE FROM integrantesSecciones
         WHERE id_seccion = @id_seccion
-          AND id_alumno  = @id_alumno
+          AND carnet_alumno  = @id_alumno
       `);
     res.json({ message: 'Alumno eliminado de la sección' });
   } catch (err) {
