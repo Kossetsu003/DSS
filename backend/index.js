@@ -33,8 +33,8 @@ app.listen(PORT, () => {
 
 app.get('/perfil', requireLogin, (req, res) => {
   res.json({
-    id:   req.session.userId,
-    rol:  req.session.role
+    id:   req.session.user.id,
+    rol:  req.session.user.rol
   });
 });
 
@@ -72,7 +72,6 @@ app.post('/login', async (req, res) => {
 });
 
 function requireLogin(req, res, next) {
-  console.log(req.session.user);
   if (!req.session.user) {
     return res.status(401).json({ error: 'No estás autenticado' });
   }

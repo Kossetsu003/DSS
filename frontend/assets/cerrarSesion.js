@@ -6,7 +6,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   .then(response => response.json())
   .then(data => {
     console.log(data.mensaje);
-    window.location.href = 'login.html';
+    window.location.href = '/DSS/frontend/Vista_login.html';
   })
   .catch(error => {
     console.error('Error cerrando sesión:', error);
