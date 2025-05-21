@@ -33,8 +33,8 @@ app.listen(PORT, () => {
 
 app.get('/perfil', requireLogin, (req, res) => {
   res.json({
-    id:   req.session.user.id,
-    rol:  req.session.user.rol
+    id: req.session.user.id,
+    rol: req.session.user.rol
   });
 });
 
@@ -110,45 +110,103 @@ app.post('/secciones', async (req, res) => {
   }
 });
 
-// 1) Listar secciones
 app.get('/seccionesListar', async (req, res) => {
   const pool = await poolPromise;
   const secciones = (await pool.request().query('SELECT * FROM secciones')).recordset;
   res.json(secciones);
 });
 
-// 2) Listar integrantes de una sección
 app.get('/secciones/:id/integrantes', async (req, res) => {
   const { id } = req.params;
-  const pool = await poolPromise;
-  const integrantes = (await pool.request()
-    .input('id', sql.Int, id)
-    .query(`SELECT id_alumno, nombre_alumno 
-            FROM integrantesSecciones 
-            WHERE id_seccion = @id`)).recordset;
-  res.json(integrantes);
+  try {
+    const pool = await poolPromise;
+    const integrantes = (await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT 
+          u.codigo, 
+          u.nombre AS nombre 
+        FROM integrantesSecciones i
+        JOIN usuarios u 
+          ON u.id = i.id_alumno
+        WHERE i.id_seccion = @id
+      `)).recordset;
+    res.json(integrantes);
+  } catch (err) {
+    console.error('Error al obtener integrantes:', err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
 });
 
-// 3) Listar todos los alumnos (rol = 1)
 app.get('/alumnos', async (req, res) => {
   const pool = await poolPromise;
   const alumnos = (await pool.request()
-    .query(`SELECT id, codigo 
-            FROM usuarios 
-            WHERE rol = 1`)).recordset;
+    .query(`
+      SELECT id,
+             codigo,
+             nombre
+      FROM usuarios
+      WHERE rol = 1
+    `)).recordset;
   res.json(alumnos);
 });
 
-// 4) Matricular un alumno en una sección
 app.post('/secciones/:id/matricular', async (req, res) => {
   const { id } = req.params;
-  const { id_alumno } = req.body;
+  const { id_alumno: idAlumno } = req.body;
+
+  if (!idAlumno || isNaN(idAlumno)) {
+    return res.status(400).json({ error: 'ID del alumno es inválido o no enviado.' });
+  }
+
   const pool = await poolPromise;
-  await pool.request()
-    .input('id_seccion', sql.Int, id)
-    .input('id_alumno',  sql.Int, id_alumno)
-    .input('nombre_alumno', sql.VarChar, /* podrías traerlo o replicarlo */ '')
-    .query(`INSERT INTO integrantesSecciones (id_alumno, nombre_alumno, id_seccion)
-            VALUES (@id_alumno, (SELECT codigo FROM usuarios WHERE id = @id_alumno), @id_seccion)`);
-  res.json({ message: 'Alumno matriculado' });
+
+  try {
+    const yaExiste = await pool.request()
+      .input('id', sql.Int, id)
+      .input('idAlumno', sql.Int, idAlumno)
+      .query(`
+        SELECT COUNT(*) AS total
+        FROM integrantesSecciones
+        WHERE id_seccion = @id AND id_alumno = @idAlumno
+      `);
+
+    if (yaExiste.recordset[0].total > 0) {
+      return res.status(400).json({ error: 'El alumno ya está matriculado en esta sección.' });
+    }
+
+    await pool.request()
+      .input('id', sql.Int, id)
+      .input('idAlumno', sql.Int, idAlumno)
+      .query(`
+        INSERT INTO integrantesSecciones (id_seccion, id_alumno)
+        VALUES (@id, @idAlumno)
+      `);
+
+    res.status(201).json({ mensaje: 'Alumno matriculado correctamente.' });
+  } catch (err) {
+    console.error('Error al matricular alumno:', err);
+    res.status(500).json({ error: 'Error en el servidor.' });
+  }
+});
+
+
+app.delete('/secciones/:id/integrantes/:alumnoId', async (req, res) => {
+  const { id, alumnoId } = req.params;
+  console.log(req.params)
+  try {
+    const pool = await poolPromise;
+    await pool.request()
+      .input('id_seccion', sql.Int, alumnoId ? parseInt(id) : null)
+      .input('id_alumno', sql.Int, alumnoId ? parseInt(alumnoId) : null)
+      .query(`
+        DELETE FROM integrantesSecciones
+        WHERE id_seccion = @id_seccion
+          AND id_alumno  = @id_alumno
+      `);
+    res.json({ message: 'Alumno eliminado de la sección' });
+  } catch (err) {
+    console.error('Error al eliminar integrante:', err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
 });
