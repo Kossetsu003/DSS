@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <script src="../frontend/assets/sesionDoce.js"></script>
     <title>Document</title>
 </head>
@@ -90,17 +90,15 @@
             <form>
                 <p class="text-gray-600  mb-6">Seleccione la seccion correspondiente</p>
                  <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                        <option>Seccion 3B</option>
-                        <option>Seccion 3A</option>
-                        
+                    <select id="select-seccion" class="border p-2 rounded w-full">
                     </select>
                 </div>
                 <p class="text-gray-600  mb-6">Seleccione la prueba correspondiente</p> 
                  <div class="mb-4">
                     <select class="border p-2 rounded w-full">
-                        <option>Credito fiscal</option>
-                        <option>Factura cliente final</option>
+                      <option>Credito fiscal</option>
+                      <option>Factura cliente final</option>
+                      <option>Nota de credito</option>
                     </select>
                 </div>
                 <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
@@ -118,26 +116,8 @@
     </div>
 </div>
 
-  <!-- Alert INCORRECTO -->
-<div
-  class="fixed top-4 left-1/2 -translate-x-1/2 z-50 font-regular w-full max-w-screen-md rounded-lg bg-red-400 bg-opacity-50 px-4 py-4 text-base text-white"
-  data-dismissible="alert "
->
   <!-- icono -->
-  <div class="absolute top-4 left-4">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="currentColor" aria-hidden="true" class="mt-px h-6 w-6">
-      <path fill-rule="evenodd"
-            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-            clip-rule="evenodd" />
-    </svg>
-  </div>
 
-  <!-- texto -->
-  <div class="ml-8 mr-12">
-    <h5 class="text-xl font-semibold">Error 00010</h5>
-    <p class="mt-2">Esta prueba ya se asigno</p>
-  </div>
 
   <!-- botón de cierre (intacto) -->
   <div
@@ -200,4 +180,27 @@
 </html>
 </body>
 <script src="../frontend/assets/cerrarSesion.js"></script>
+<script>
+async function cargarSecciones() {
+  try {
+    const res = await fetch('http://localhost:4000/seccionesListar', {
+      credentials: 'include'
+    });
+    const secciones = await res.json();
+    const select = document.getElementById('select-seccion');
+    console.log(secciones);
+
+    secciones.forEach(s => {
+      const option = document.createElement('option');
+      option.value = s.id;
+      option.textContent = s.nombre + " " + s.anio;
+      select.appendChild(option);
+    });
+  } catch (err) {
+    console.error('Error al cargar secciones:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', cargarSecciones);
+</script>
 </html>
