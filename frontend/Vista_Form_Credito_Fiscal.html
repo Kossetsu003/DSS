@@ -1,350 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="../frontend/assets/sesion.js"></script>
-    <title>Document</title>
-</head>
-<body>
-    <!-- component -->
-<!DOCTYPE html>
 <html lang="es">
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Agregar estilos para la vista de dispositivos pequeños */
-        @media (max-width: 768px) {
-            .flex-wrap {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .section-small {
-                width: 50%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="../frontend/assets/sesion.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Crédito Fiscal</title>
+  <style>
+    @media (max-width: 768px) {
+      .flex-wrap { display: flex; flex-wrap: wrap; }
+      .section-small { width: 50%; }
+    }
+  </style>
 </head>
-<body>
-<div class="flex flex-col h-screen bg-gray-100">
+<body class="flex flex-col h-screen bg-gray-100">
 
-    <!-- Barra de navegación superior -->
-    <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
-        <div class="flex items-center">
-            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
-               
-                <h2 class="font-bold text-xl">FactuEdu</h2>
-            </div>
-            <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
-                <button id="menuBtn">
-                    <i class="fas fa-bars text-gray-500 text-lg"></i> <!-- Ícono de menú -->
-                </button>
-            </div>
-        </div>
+  <!-- Barra superior -->
+  <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="hidden md:flex items-center">
+        <h2 class="font-bold text-xl">FactuEdu</h2>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button id="menuBtn">
+          <i class="fas fa-bars text-gray-500 text-lg"></i>
+        </button>
+      </div>
+    </div>
+    <div class="space-x-5">
+      <!-- Aquí iconos de notificaciones/perfil -->
+    </div>
+  </div>
 
-        <!-- Ícono de Notificación y Perfil -->
-        <div class="space-x-5">
-            <button>
-                
-            </button>
-            <!-- Botón de Perfil -->
-            <button>
-                
-            </button>
-        </div>
+  <div class="flex-1 flex">
+    <!-- Sidebar -->
+    <div id="sideNav" class="p-2 bg-white w-60 flex flex-col hidden md:flex">
+      <nav>
+        <a href="../frontend/Vista_Prueba_Asig_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-users mr-2"></i>Pruebas asignadas
+        </a>
+        <a href="../frontend/Vista_Calificacion_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-file-alt mr-2"></i>Calificación
+        </a>
+        <a id="logoutBtn" href="#"
+           class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto">
+          <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+        </a>
+      </nav>
+      <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY</p>
     </div>
 
     <!-- Contenido principal -->
-    <div class="flex-1 flex">
-        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
-        <div class="p-2 bg-white w-60 flex flex-col hidden md:flex" id="sideNav">
-            <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Prueba_Asig_Alu.html">
-                    <i class="fas fa-users mr-2"></i>Pruebas asignadas
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificacion_Alu.html">
-                    <i class="fas fa-file-alt mr-2"></i>Calificacion
-                </a>
-               <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-            </a>
-            </nav>
+    <div class="flex-1 p-4 overflow-auto">
+      <form id="creditoForm" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
+        <!-- 1. Encabezado -->
+        <header class="grid md:grid-cols-3 gap-4 border-b pb-4">
+          <div class="md:col-span-2 flex flex-col items-center text-center">
+            <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 mb-2"/>
+            <h1 class="text-lg font-semibold">Dolores Cerón De Esquivel</h1>
+            <p class="text-sm">
+              Dirección: Calle El Milagro km 27, Cton. El Cimarrón #1, La Libertad.<br/>
+              Giro: Venta al por menor de prendas de vestir y accesorios.
+            </p>
+          </div>
+          <div class="flex flex-col items-center justify-center border rounded">
+            <p class="font-semibold">COMPROBANTE CRÉDITO FISCAL</p>
+            <p class="text-4xl font-bold text-red-600">No. 0001</p>
+            <p class="text-sm">N.R.C.: 311001-0  NIT.: 1102-011074-102-5</p>
+          </div>
+        </header>
 
-            
-
-            <!-- Señalador de ubicación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
-
-            <!-- Copyright al final de la navegación lateral -->
-            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
-
-        </div>
-
-
-
-
-            <!-- Contenido principal -->
-
-<form class="mx-auto w-full max-w-4xl rounded-lg bg-white p-6 shadow">
-    <!-- 1. Encabezado -->
-    <header class="grid gap-4 md:grid-cols-3 border-b pb-4">
-      <div class="col-span-2 flex flex-col items-center text-center">
-        <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 object-contain mb-2">
-        <h1 class="text-lg font-semibold">Dolores Cerón De Esquivel</h1>
-        <p class="text-sm leading-snug">
-          Dirección: Calle El Milagro km 27, Cton. El Cimarrón #1, La Libertad.<br>
-          Giro: Venta al por menor de prendas de vestir y accesorios.
-        </p>
-      </div>
-      <div class="flex flex-col items-center justify-center border rounded">
-        <p class="font-semibold">COMPROBANTE CRÉDITO FISCAL</p>
-        <p class="text-4xl font-bold text-red-600 tracking-widest">No. 0001</p>
-        <p class="text-sm">N.R.C.: 311001-0<br>NIT.: 1102-011074-102-5</p>
-      </div>
-    </header>
-
-    <!-- 2. Cliente y operación -->
-    <section class="mt-4 space-y-2 text-sm">
-      <div class="grid gap-4 md:grid-cols-2">
-        <label class="flex flex-col">
-          Cliente
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          Fecha
-          <input type="date" class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                                    focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-      </div>
-
-      <label class="flex flex-col">
-        Dirección
-        <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                      focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-      </label>
-
-      <div class="grid gap-4 md:grid-cols-4">
-        <label class="flex flex-col md:col-span-2">
-          Municipio
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          Depto.
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          NIT
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-      </div>
-
-      <div class="grid gap-4 md:grid-cols-4">
-        <label class="flex flex-col">
-          Registro No.
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          Giro
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          Nota Remisión Anterior
-          <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex flex-col">
-          Fecha Nota
-          <input type="date" class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                                    focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-      </div>
-
-      <div class="grid gap-4 md:grid-cols-3">
-        <label class="flex items-center gap-2">
-          Condición
-          <input class="mt-1 w-32 rounded border border-gray-400/70 bg-white px-2 py-1
-                        focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="radio" class="h-4 w-4 accent-blue-600"> Contado
-        </label>
-        <label class="flex items-center gap-2">
-          <input type="radio" class="h-4 w-4 accent-blue-600"> Crédito
-        </label>
-      </div>
-
-      <label class="flex flex-col">
-        Venta a cta. de
-        <input class="mt-1 w-full rounded border border-gray-400/70 bg-white px-2 py-1
-                      focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-      </label>
-    </section>
-
-    <!-- 3. Detalle -->
-    <section class="mt-6">
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs">
-          <thead>
-            <tr class="bg-gray-800 text-white">
-              <th class="px-1 py-1 w-14">CANT</th>
-              <th class="px-1 py-1">DESCRIPCIÓN</th>
-              <th class="px-1 py-1 w-28">PRECIO UNITARIO</th>
-              <th class="px-1 py-1 w-24">NO SUJETAS</th>
-              <th class="px-1 py-1 w-24">EXENTAS</th>
-              <th class="px-1 py-1 w-24">GRAVADAS</th>
-            </tr>
-          </thead>
-          <tbody id="rows">
-            <tr>
-              <td><input type="number" min="0"
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs text-center
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-              <td><input
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-              <td><input type="number" min="0" step="any"
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs text-right
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-              <td><input type="number" min="0" step="any"
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs text-right
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-              <td><input type="number" min="0" step="any"
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs text-right
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-              <td><input type="number" min="0" step="any"
-                  class="w-full rounded border border-gray-400/70 bg-white px-1 py-0.5 text-xs text-right
-                         focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <button type="button" id="add"
-              class="mt-2 rounded bg-blue-600 px-3 py-1 text-white">Añadir línea</button>
-    </section>
-
-    <!-- 4. Totales -->
-    <section class="mt-6 grid gap-1 text-sm md:grid-cols-2">
-      <label class="flex items-center gap-2">
-        SON:
-        <input class="flex-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                       focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-      </label>
-
-      <div class="border rounded p-3 space-y-1">
-        <div class="flex justify-between">
-          <span>Sumas</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between">
-          <span>13 % IVA</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between font-semibold">
-          <span>Sub-Total</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between">
-          <span>Menos IVA Retenido 1 %</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between">
-          <span>Ventas Exentas</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between">
-          <span>Ventas no Sujetas</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-        <div class="flex justify-between font-bold text-lg">
-          <span>Venta Total</span>
-          <input readonly
-            class="w-32 rounded border border-gray-400/70 bg-gray-50 px-2 py-0.5 text-right">
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. Firmas -->
-    <section class="mt-6 text-xs">
-      <label class="block font-semibold">
-        C/C:&nbsp;<span class="italic">Llenar si la operación es superior a $ 11,428.58</span>
-      </label>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-2 text-sm">
-        <div class="border rounded p-3 space-y-2">
-          <p class="font-medium border-b pb-1">ENTREGADO POR:</p>
-          <label class="flex flex-col">Nombre
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        <!-- 2. Cliente y operación -->
+        <section class="mt-4 space-y-4 text-sm">
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="flex flex-col">
+              Cliente
+              <input id="clienteNombre" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              Fecha
+              <input id="fechaEmision" type="date" class="mt-1 p-2 border rounded"/>
+            </label>
+          </div>
+          <label class="flex flex-col">
+            Dirección
+            <input id="direccion" type="text" class="mt-1 p-2 border rounded"/>
           </label>
-          <label class="flex flex-col">DUI
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          <div class="grid md:grid-cols-4 gap-4">
+            <label class="flex flex-col">
+              Municipio
+              <input id="municipio" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              Depto.
+              <input id="departamento" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              NIT
+              <input id="nit" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              Registro No.
+              <input id="registro" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+          </div>
+          <div class="grid md:grid-cols-3 gap-4">
+            <label class="flex flex-col">
+              Giro
+              <input id="giro" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              Nota Remisión
+              <input id="notaRemision" type="text" class="mt-1 p-2 border rounded"/>
+            </label>
+            <label class="flex flex-col">
+              Fecha Nota
+              <input id="fechaNota" type="date" class="mt-1 p-2 border rounded"/>
+            </label>
+          </div>
+          <div class="flex items-center gap-4">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="condicion" value="Contado"/> Contado
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="condicion" value="Crédito"/> Crédito
+            </label>
+          </div>
+          <label class="flex flex-col">
+            Venta a cta. de
+            <input id="ventaCta" type="text" class="mt-1 p-2 border rounded"/>
           </label>
-          <label class="flex flex-col">Firma
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-          </label>
-        </div>
+        </section>
 
-        <div class="border rounded p-3 space-y-2">
-          <p class="font-medium border-b pb-1">RECIBIDO POR:</p>
-          <label class="flex flex-col">Nombre
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-          </label>
-          <label class="flex flex-col">DUI
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-          </label>
-          <label class="flex flex-col">Firma
-            <input class="mt-1 rounded border border-gray-400/70 bg-white px-2 py-1
-                          focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-          </label>
-        </div>
-      </div>
-    </section>
+        <!-- 3. Detalle -->
+        <section class="mt-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border">
+              <thead class="bg-gray-800 text-white">
+                <tr>
+                  <th class="p-1 w-14">Cant.</th>
+                  <th class="p-1">Descripción</th>
+                  <th class="p-1 w-28">Precio Unit.</th>
+                  <th class="p-1 w-24">No Sujetas</th>
+                  <th class="p-1 w-24">Exentas</th>
+                  <th class="p-1 w-24">Gravadas</th>
+                </tr>
+              </thead>
+              <tbody id="rows">
+                <tr>
+                  <td><input type="number" min="0" value="0" class="w-full p-1 border rounded text-right"/></td>
+                  <td><input type="text" class="w-full p-1 border rounded"/></td>
+                  <td><input type="number" min="0" step="0.01" value="0" class="w-full p-1 border rounded text-right"/></td>
+                  <td><input type="number" min="0" step="0.01" value="0" class="w-full p-1 border rounded text-right"/></td>
+                  <td><input type="number" min="0" step="0.01" value="0" class="w-full p-1 border rounded text-right"/></td>
+                  <td><input type="number" min="0" step="0.01" value="0" class="w-full p-1 border rounded text-right"/></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button id="addRow" type="button" class="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Añadir línea</button>
+        </section>
 
-    <!-- 6. Botones -->
-    <div class="mt-6 flex justify-end gap-3">
-      <button type="submit" class="rounded bg-green-600 px-6 py-2 text-white">Guardar</button>
+        <!-- 4. Totales -->
+        <section class="mt-6 grid md:grid-cols-2 gap-4">
+          <label class="flex flex-col">
+            SON:
+            <input id="totalLiteral" type="text" class="mt-1 p-2 border rounded"/>
+          </label>
+          <div class="border rounded p-3 space-y-1">
+            <div class="flex justify-between"><span>Sumas</span><input id="sumas" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between"><span>13% IVA</span><input id="iva13" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between font-semibold"><span>Sub-Total</span><input id="subTotal" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between"><span>Iva Retenido</span><input id="ivaRetenido" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between"><span>Ventas Exentas</span><input id="ventasExentas" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between"><span>Ventas No Sujetas</span><input id="ventasNoSujetas" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+            <div class="flex justify-between font-bold text-lg"><span>Venta Total</span><input id="ventaTotal" type="number" min="0" step="0.01" value="0" class="w-32 p-1 border rounded text-right"/></div>
+          </div>
+        </section>
+
+        <!-- 5. Firmas -->
+        <section class="mt-6 text-sm grid md:grid-cols-2 gap-4">
+          <div class="border rounded p-3 space-y-2">
+            <p class="font-medium border-b pb-1">ENTREGADO POR:</p>
+            <input id="entregadoNombre" placeholder="Nombre" class="w-full p-1 border rounded"/>
+            <input id="entregadoDUI" placeholder="DUI" class="w-full p-1 border rounded"/>
+            <input id="entregadoFirma" placeholder="Firma" class="w-full p-1 border rounded"/>
+          </div>
+          <div class="border rounded p-3 space-y-2">
+            <p class="font-medium border-b pb-1">RECIBIDO POR:</p>
+            <input id="recibidoNombre" placeholder="Nombre" class="w-full p-1 border rounded"/>
+            <input id="recibidoDUI" placeholder="DUI" class="w-full p-1 border rounded"/>
+            <input id="recibidoFirma" placeholder="Firma" class="w-full p-1 border rounded"/>
+          </div>
+        </section>
+
+        <!-- 6. Botón Guardar -->
+        <div class="mt-6 flex justify-end">
+          <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Guardar</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 
-  <!-- script para duplicar filas -->
-  <script>
-    document.getElementById('add').onclick = () => {
+  <script src="../frontend/assets/cerrarSesion.js" defer></script>
+  <script defer>
+    // Añadir fila
+    document.getElementById('addRow').onclick = () => {
       const tr = document.querySelector('#rows tr').cloneNode(true);
-      tr.querySelectorAll('input').forEach(i => i.value = '');
+      tr.querySelectorAll('input').forEach(i => i.value = i.type === 'number' ? '0' : '');
       document.getElementById('rows').appendChild(tr);
     };
+
+    // Validación y envío
+    document.getElementById('creditoForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const params = new URLSearchParams(location.search);
+      const tareaId = params.get('tarea');
+      const id_alumno = localStorage.getItem('id');
+      if (!tareaId || !id_alumno) {
+        return alert('Tarea faltante o sesión expiró.');
+      }
+      // Recoger y validar
+      const getVal = id => document.getElementById(id).value.trim();
+      const numVal = id => parseFloat(document.getElementById(id).value);
+      const required = ['clienteNombre','fechaEmision','direccion','municipio','departamento','nit'];
+      for (let id of required){
+        if (!getVal(id)) return alert('Completa el campo: '+id);
+      }
+      // validar no negativos
+      const numberFields = ['sumas','iva13','subTotal','ivaRetenido','ventasExentas','ventasNoSujetas','ventaTotal'];
+      for (let id of numberFields){
+        if (numVal(id) < 0) return alert('No se permiten valores negativos en '+id);
+      }
+      // preparar body
+      const body = {
+        id_alumno: parseInt(id_alumno),
+        cliente_nombre: getVal('clienteNombre'),
+        fecha: getVal('fechaEmision'),
+        direccion: getVal('direccion'),
+        municipio: getVal('municipio'),
+        departamento: getVal('departamento'),
+        nit: getVal('nit'),
+        registro: getVal('registro'),
+        giro: getVal('giro'),
+        nota_remision: getVal('notaRemision'),
+        fecha_nota: getVal('fechaNota'),
+        condicion: document.querySelector('input[name="condicion"]:checked')?.value || '',
+        venta_cta_de: getVal('ventaCta'),
+        total_literal: getVal('totalLiteral'),
+        suma: numVal('sumas')||0,
+        iva13: numVal('iva13')||0,
+        sub_total: numVal('subTotal')||0,
+        iva_retenido: numVal('ivaRetenido')||0,
+        ventas_exentas: numVal('ventasExentas')||0,
+        ventas_no_sujetas: numVal('ventasNoSujetas')||0,
+        venta_total: numVal('ventaTotal')||0,
+        entregado_nombre: getVal('entregadoNombre'),
+        entregado_dui: getVal('entregadoDUI'),
+        entregado_firma: getVal('entregadoFirma'),
+        recibido_nombre: getVal('recibidoNombre'),
+        recibido_dui: getVal('recibidoDUI'),
+        recibido_firma: getVal('recibidoFirma'),
+        detalles: []
+      };
+      // detalle filas
+      document.querySelectorAll('#rows tr').forEach(tr => {
+        const inputs = tr.querySelectorAll('input');
+        body.detalles.push({
+          cantidad:        parseFloat(inputs[0].value)||0,
+          descripcion:     inputs[1].value.trim(),
+          precio_unitario: parseFloat(inputs[2].value)||0,
+          no_sujetas:      parseFloat(inputs[3].value)||0,
+          exentas:         parseFloat(inputs[4].value)||0,
+          gravadas:        parseFloat(inputs[5].value)||0
+        });
+      });
+      // envío
+      try {
+        const res = await fetch(`http://localhost:4000/credito-fiscal/${tareaId}`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          credentials:'include',
+          body: JSON.stringify(body)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error||'Error al guardar');
+        alert('Guardado exitoso.');
+        window.location.href = '/DSS/frontend/Vista_Prueba_Asig_Alu.html';
+      } catch (err) {
+        console.error(err);
+        alert(err.message||'Error de conexión.');
+      }
+    });
   </script>
-
-            <!-- Fin del contenido-->
-        
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
 </body>
-<script src="../frontend/assets/cerrarSesion.js"></script>
 </html>

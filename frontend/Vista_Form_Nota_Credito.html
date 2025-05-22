@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
+  <script src="../frontend/assets/sesion.js" defer></script>
+  <script src="../frontend/assets/cerrarSesion.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <title>Nota de Crédito</title>
+  <style>
+    @media (max-width: 768px) {
+      .flex-wrap { display: flex; flex-wrap: wrap; }
+      .section-small { width: 50%; }
+    }
+  </style>
+</head>
+<body class="flex flex-col h-screen bg-gray-100">
+
+  <!-- Barra superior -->
+  <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="hidden md:flex items-center">
+        <h2 class="font-bold text-xl">FactuEdu</h2>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button id="menuBtn"><i class="fas fa-bars text-gray-500 text-lg"></i></button>
+      </div>
+    </div>
+    <div class="space-x-5">
+      <!-- aquí iconos opcionales -->
+    </div>
+  </div>
+
+  <div class="flex-1 flex">
+    <!-- Sidebar -->
+    <div id="sideNav" class="p-2 bg-white w-60 flex flex-col hidden md:flex">
+      <nav>
+        <a href="Vista_Prueba_Asig_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-users mr-2"></i>Pruebas asignadas
+        </a>
+        <a href="Vista_Calificacion_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-file-alt mr-2"></i>Calificación
+        </a>
+        <a id="logoutBtn" href="#"
+           class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto">
+          <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+        </a>
+      </nav>
+      <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY</p>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="flex-1 p-4 overflow-auto">
+      <form id="notaCreditoForm" class="mx-auto w-full max-w-4xl bg-white p-6 shadow-lg rounded-md">
+      
+        <!-- 1. Encabezado / Emisor -->
+        <header class="grid gap-4 md:grid-cols-3 items-center border-b pb-4">
+          <div class="col-span-2 flex items-start space-x-4">
+            <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 object-contain">
+            <div class="text-sm">
+              <p class="font-semibold">FactuEdu</p>
+              <p>OFICINA: Av. Jerusales 48°, Calle los pinos</p>
+              <p>Teléfono: 600-0234 • correo: contacto@linio.com</p>
+              <p>ALMACÉN: Calle Viña del Mar, Lote 11 Zona Industrial – Villa El Salvador</p>
+            </div>
+          </div>
+          <div class="flex flex-col items-center border rounded-lg p-3 bg-gray-50">
+            <p class="font-semibold text-sm">R.U.C. 20547836473</p>
+            <p class="font-semibold">NOTA DE CRÉDITO</p>
+            <p class="text-4xl font-bold text-red-600">001-000777</p>
+          </div>
+        </header>
+
+        <!-- 2. Datos del cliente y documento modificado -->
+        <section class="mt-4 space-y-3 text-sm">
+          <div class="grid gap-4 md:grid-cols-2">
+            <label class="flex flex-col">
+              Señor(es)
+              <input id="cliente" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </label>
+            <label class="flex flex-col">
+              Fecha de emisión
+              <input id="fechaEmision" type="date" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </label>
+          </div>
+          <label class="flex flex-col">
+            Dirección
+            <input id="direccion" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          </label>
+          <div class="grid gap-4 md:grid-cols-3">
+            <label class="flex flex-col">
+              DOC. QUE MODIFICA (tipo)
+              <input id="docTipo" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </label>
+            <label class="flex flex-col">
+              Serie y Número
+              <input id="serieNum" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </label>
+            <label class="flex flex-col">
+              Fecha original
+              <input id="fechaOriginal" type="date" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </label>
+          </div>
+        </section>
+
+        <!-- 3. Detalle de ítems -->
+        <section class="mt-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border-collapse">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="border px-1 py-1 w-10">ITEM</th>
+                  <th class="border px-1 py-1 w-16">CÓDIGO</th>
+                  <th class="border px-1 py-1 w-14">CANT.</th>
+                  <th class="border px-1 py-1">DESCRIPCIÓN</th>
+                  <th class="border px-1 py-1 w-24">P. UNITARIO</th>
+                  <th class="border px-1 py-1 w-16">DESC.</th>
+                  <th class="border px-1 py-1 w-24">VALOR VENTA</th>
+                </tr>
+              </thead>
+              <tbody id="rows">
+                <tr>
+                  <td><input type="text" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="text" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="number" min="0" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs text-right focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button id="add" type="button" class="mt-2 rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700">
+            Añadir línea
+          </button>
+        </section>
+
+        <!-- 4. Motivo de modificación -->
+        <section class="mt-6 text-sm">
+          <label class="flex flex-col">
+            Motivo de la modificación
+            <textarea id="motivo" rows="2" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
+          </label>
+        </section>
+
+        <!-- 5. Totales -->
+        <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+          <div class="flex flex-col space-y-1">
+            <label class="flex justify-between">
+              Sub-Total
+              <input id="subTotal" class="w-24 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+            </label>
+            <label class="flex justify-between">
+              I.G.V. (%)
+              <input id="igv" class="w-24 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+            </label>
+            <label class="flex justify-between font-bold">
+              Total
+              <input id="total" class="w-24 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs">
+            </label>
+          </div>
+          <div class="flex flex-col justify-end">
+            <p class="text-center italic">ADQUIRENTE O USUARIO</p>
+          </div>
+        </section>
+
+        <!-- 6. Firma y pies -->
+        <section class="mt-6 text-xs">
+          <div class="flex justify-between">
+            <div class="text-center">
+              <p class="font-medium">-----------------------------</p>
+              <p>Firma Linio Perú S.A.C.</p>
+            </div>
+            <div class="text-center">
+              <p class="font-medium">-----------------------------</p>
+              <p>Cancelado</p>
+            </div>
+          </div>
+          <footer class="mt-4 text-[10px] text-center text-gray-600">
+            <p>R.U.C. 20510510641 • Serie: 001 • Fecha Autorización: 09-05-2013 • Tiraje: 001-010 al 001-110</p>
+          </footer>
+        </section>
+
+        <!-- 7. Botón Guardar -->
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="submit" class="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Añadir fila de detalle
+    document.getElementById('add').onclick = () => {
+      const tr = document.querySelector('#rows tr').cloneNode(true);
+      tr.querySelectorAll('input').forEach(i => i.value = '');
+      document.getElementById('rows').appendChild(tr);
+    };
+
+    // Enviar formulario
+    document.getElementById('notaCreditoForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const tareaId   = new URLSearchParams(location.search).get('tarea');
+      const id_alumno = localStorage.getItem('id');
+      if (!tareaId || !id_alumno) {
+        return alert('Falta tarea o sesión expirada.');
+      }
+
+      // Cabecera
+      const body = {
+        id_alumno:           parseInt(id_alumno,10),
+        cliente_nombre:      document.getElementById('cliente').value.trim(),
+        fecha_emision:       document.getElementById('fechaEmision').value,
+        direccion:           document.getElementById('direccion').value.trim(),
+        doc_modifica_tipo:   document.getElementById('docTipo').value.trim(),
+        serie_numero:        document.getElementById('serieNum').value.trim(),
+        fecha_original:      document.getElementById('fechaOriginal').value,
+        motivo_modificacion: document.getElementById('motivo').value.trim(),
+        detalles:            []
+      };
+
+      // Validar cabecera
+      for (const [k,v] of [
+        ['cliente_nombre', body.cliente_nombre],
+        ['direccion', body.direccion],
+        ['doc_modifica_tipo', body.doc_modifica_tipo],
+        ['serie_numero', body.serie_numero]
+      ]) {
+        if (!v) return alert(`${k} es obligatorio.`);
+      }
+
+      // Detalles
+      document.querySelectorAll('#rows tr').forEach((tr,i) => {
+        const [inpItem, inpCod, inpCant, inpDesc, inpPU, inpDto, inpVV] = tr.querySelectorAll('input');
+        const d = {
+          item:             inpItem.value.trim(),
+          codigo:           inpCod.value.trim(),
+          cantidad:         parseInt(inpCant.value,10),
+          descripcion:      inpDesc.value.trim(),
+          precio_unitario:  parseFloat(inpPU.value),
+          descuento:        parseFloat(inpDto.value),
+          valor_venta:      parseFloat(inpVV.value)
+        };
+        if (!d.descripcion) return alert(`Falta descripción en línea ${i+1}`);
+        if (d.cantidad<=0 || d.precio_unitario<0 || d.descuento<0 || d.valor_venta<0)
+          return alert(`Valores inválidos en línea ${i+1}`);
+        body.detalles.push(d);
+      });
+      if (!body.detalles.length) return alert('Agrega al menos un detalle.');
+
+      // POST
+      try {
+        const res = await fetch(`http://localhost:4000/nota-credito/${tareaId}`, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error||'Error servidor');
+        alert('Guardado exitoso');
+        window.location.href = '/DSS/frontend/Vista_Prueba_Asig_Alu.html';
+      } catch(err) {
+        console.error(err);
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

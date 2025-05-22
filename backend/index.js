@@ -27,10 +27,6 @@ app.use(session({
   }
 }));
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
-});
-
 app.get('/perfil', requireLogin, (req, res) => {
   res.json({
     id: req.session.user.id,
@@ -64,7 +60,7 @@ app.post('/login', async (req, res) => {
       rol: usuario.rol
     };
 
-    res.json({ message: 'Login exitoso', rol: usuario.rol });
+    res.json({ message: 'Login exitoso', rol: usuario.rol, id: usuario.id });
   } catch (err) {
     console.error('Error en /login:', err);
     res.status(500).json({ message: 'Error del servidor' });
@@ -238,4 +234,454 @@ app.post('/tareas', requireLogin, async (req, res) => {
     console.error('Error al crear tarea:', err);
     res.status(500).json({ error: 'Error en el servidor.' });
   }
+});
+
+app.get('/tareas/usuario/:alumnoId', requireLogin, async (req, res) => {
+  const { alumnoId } = req.params;
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input('alumnoId', sql.Int, parseInt(alumnoId, 10))
+      .query(`
+        SELECT 
+          t.id,
+          t.tipo_tarea,
+          s.nombre     AS seccion_nombre,
+          s.anio       AS seccion_anio,
+          CASE 
+            WHEN EXISTS(
+              SELECT 1 FROM credito_fiscal            cf WHERE cf.id_tarea = t.id
+            ) THEN 1
+            WHEN EXISTS(
+              SELECT 1 FROM FacturaConsumidorFinal    fcf WHERE fcf.id_tarea = t.id
+            ) THEN 1
+            WHEN EXISTS(
+              SELECT 1 FROM nota_credito              nc WHERE nc.id_tarea = t.id
+            ) THEN 1
+            ELSE 0
+          END AS realizado
+        FROM integrantesSecciones i
+        JOIN tareas t
+          ON t.id_seccion = i.id_seccion
+        JOIN secciones s
+          ON s.id = i.id_seccion
+        WHERE i.id_alumno = @alumnoId
+      `);
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error al obtener tareas de usuario:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+app.post('/credito-fiscal/:tareaId', async (req, res) => {
+  const { tareaId } = req.params;
+  const {
+    id_alumno,
+    cliente_nombre, fecha, direccion,
+    municipio, departamento, nit, registro, giro,
+    nota_remision, fecha_nota, condicion, venta_cta_de,
+    total_literal,
+    suma, iva13, sub_total, iva_retenido,
+    ventas_exentas, ventas_no_sujetas, venta_total,
+    entregado_nombre, entregado_dui, entregado_firma,
+    recibido_nombre, recibido_dui, recibido_firma,
+    detalles
+  } = req.body;
+
+  // 1) Validaciones generales
+  if (!id_alumno) {
+    return res.status(400).json({ error: 'Falta id_alumno.' });
+  }
+  const requiredText = [
+    ['cliente_nombre', cliente_nombre],
+    ['fecha', fecha],
+    ['direccion', direccion],
+    ['condicion', condicion],
+  ];
+  for (const [field, val] of requiredText) {
+    if (!val || String(val).trim() === '') {
+      return res.status(400).json({ error: `${field} es obligatorio.` });
+    }
+  }
+
+  // 2) Validación de totales (no negativos)
+  const numericFields = [
+    ['suma', suma],
+    ['iva13', iva13],
+    ['sub_total', sub_total],
+    ['iva_retenido', iva_retenido],
+    ['ventas_exentas', ventas_exentas],
+    ['ventas_no_sujetas', ventas_no_sujetas],
+    ['venta_total', venta_total],
+  ];
+  for (const [field, val] of numericFields) {
+    if (val == null || isNaN(val) || Number(val) < 0) {
+      return res.status(400).json({ error: `${field} debe ser un número >= 0.` });
+    }
+  }
+
+  // 3) Validar detalles
+  if (!Array.isArray(detalles) || detalles.length === 0) {
+    return res.status(400).json({ error: 'Debe incluir al menos una línea de detalle.' });
+  }
+  for (let i = 0; i < detalles.length; i++) {
+    const d = detalles[i];
+    if (!d.descripcion || d.descripcion.trim() === '') {
+      return res.status(400).json({ error: `Descripción detalle #${i+1} es obligatoria.` });
+    }
+    if (
+      d.cantidad == null || isNaN(d.cantidad) || Number(d.cantidad) <= 0 ||
+      d.precio_unitario == null || isNaN(d.precio_unitario) || Number(d.precio_unitario) < 0 ||
+      d.no_sujetas == null || isNaN(d.no_sujetas) || Number(d.no_sujetas) < 0 ||
+      d.exentas == null || isNaN(d.exentas) || Number(d.exentas) < 0 ||
+      d.gravadas == null || isNaN(d.gravadas) || Number(d.gravadas) < 0
+    ) {
+      return res.status(400).json({
+        error: `Valores numéricos inválidos en detalle #${i+1}. Deben ser >= 0 (cantidad > 0).`
+      });
+    }
+  }
+
+  // 4) Inserción en transacción
+  const pool = await poolPromise;
+  const trx  = new sql.Transaction(pool);
+
+  try {
+    await trx.begin();
+
+    // Cabecera
+    const headerReq = new sql.Request(trx)
+      .input('tarea', sql.Int, tareaId)
+      .input('alumno', sql.Int, id_alumno)
+      .input('cliente_nombre', sql.NVarChar(100), cliente_nombre)
+      .input('fecha', sql.Date, fecha)
+      .input('direccion', sql.NVarChar(200), direccion)
+      .input('municipio', sql.NVarChar(100), municipio)
+      .input('departamento', sql.NVarChar(100), departamento)
+      .input('nit', sql.NVarChar(20), nit)
+      .input('registro', sql.NVarChar(20), registro)
+      .input('giro', sql.NVarChar(150), giro)
+      .input('nota_remision', sql.NVarChar(50), nota_remision)
+      .input('fecha_nota', sql.Date, fecha_nota)
+      .input('condicion', sql.NVarChar(50), condicion)
+      .input('venta_cta_de', sql.NVarChar(150), venta_cta_de)
+      .input('total_literal', sql.NVarChar(300), total_literal)
+      .input('suma', sql.Decimal(10,2), suma)
+      .input('iva13', sql.Decimal(10,2), iva13)
+      .input('sub_total', sql.Decimal(10,2), sub_total)
+      .input('iva_retenido', sql.Decimal(10,2), iva_retenido)
+      .input('ventas_exentas', sql.Decimal(10,2), ventas_exentas)
+      .input('ventas_no_sujetas', sql.Decimal(10,2), ventas_no_sujetas)
+      .input('venta_total', sql.Decimal(10,2), venta_total)
+      .input('entregado_nombre', sql.NVarChar(100), entregado_nombre)
+      .input('entregado_dui', sql.NVarChar(20), entregado_dui)
+      .input('entregado_firma', sql.NVarChar(100), entregado_firma)
+      .input('recibido_nombre', sql.NVarChar(100), recibido_nombre)
+      .input('recibido_dui', sql.NVarChar(20), recibido_dui)
+      .input('recibido_firma', sql.NVarChar(100), recibido_firma);
+
+    const headerResult = await headerReq.query(`
+      INSERT INTO credito_fiscal (
+        id_tarea, id_alumno,
+        cliente_nombre, fecha, direccion,
+        municipio, departamento, nit, registro, giro,
+        nota_remision, fecha_nota, condicion, venta_cta_de,
+        total_literal,
+        suma, iva13, sub_total, iva_retenido,
+        ventas_exentas, ventas_no_sujetas, venta_total,
+        entregado_nombre, entregado_dui, entregado_firma,
+        recibido_nombre, recibido_dui, recibido_firma
+      )
+      OUTPUT INSERTED.id_credito
+      VALUES (
+        @tarea, @alumno,
+        @cliente_nombre, @fecha, @direccion,
+        @municipio, @departamento, @nit, @registro, @giro,
+        @nota_remision, @fecha_nota, @condicion, @venta_cta_de,
+        @total_literal,
+        @suma, @iva13, @sub_total, @iva_retenido,
+        @ventas_exentas, @ventas_no_sujetas, @venta_total,
+        @entregado_nombre, @entregado_dui, @entregado_firma,
+        @recibido_nombre, @recibido_dui, @recibido_firma
+      );
+    `);
+
+    const idCredito = headerResult.recordset[0].id_credito;
+
+    // Detalles: cada uno con su propio Request para evitar parámetros duplicados
+    for (const d of detalles) {
+      await new sql.Request(trx)
+        .input('credito',        sql.Int,     idCredito)
+        .input('cantidad',       sql.Int,     d.cantidad)
+        .input('descripcion',    sql.NVarChar(200), d.descripcion)
+        .input('precio_unitario',sql.Decimal(10,2), d.precio_unitario)
+        .input('no_sujetas',     sql.Decimal(10,2), d.no_sujetas)
+        .input('exentas',        sql.Decimal(10,2), d.exentas)
+        .input('gravadas',       sql.Decimal(10,2), d.gravadas)
+        .query(`
+          INSERT INTO credito_fiscal_detalle (
+            id_credito, cantidad, descripcion,
+            precio_unitario, no_sujetas, exentas, gravadas
+          )
+          VALUES (
+            @credito, @cantidad, @descripcion,
+            @precio_unitario, @no_sujetas, @exentas, @gravadas
+          );
+        `);
+    }
+
+    await trx.commit();
+    res.status(201).json({ mensaje: 'Guardado exitoso', id_credito: idCredito });
+  } catch (err) {
+    await trx.rollback();
+    console.error(err);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+app.post('/nota-credito/:tareaId', requireLogin, async (req, res) => {
+  const { tareaId } = req.params;
+  const {
+    id_alumno,
+    cliente_nombre, fecha_emision: fecha, direccion,
+    doc_modifica_tipo, serie_numero, fecha_original,
+    motivo_modificacion,
+    detalles
+  } = req.body;
+
+  // 1) Validaciones básicas
+  if (!id_alumno) return res.status(400).json({ error:'Falta id_alumno' });
+  for (let [k,v] of [
+    ['cliente_nombre', cliente_nombre],
+    ['direccion',       direccion],
+    ['doc_modifica_tipo', doc_modifica_tipo],
+    ['serie_numero',    serie_numero]
+  ]) {
+    if (!v || !String(v).trim())
+      return res.status(400).json({ error:`${k} es obligatorio` });
+  }
+  if (!Array.isArray(detalles) || detalles.length === 0)
+    return res.status(400).json({ error:'Debes enviar al menos un detalle' });
+  detalles.forEach((d,i) => {
+    if (!d.descripcion || !d.descripcion.trim())
+      throw { status:400, msg:`Falta descripción en detalle #${i+1}` };
+    if (d.cantidad <= 0 || d.precio_unitario < 0 || d.descuento < 0 || d.valor_venta < 0)
+      throw { status:400, msg:`Valores inválidos en detalle #${i+1}` };
+  });
+
+  const pool = await poolPromise;
+  const trx  = new sql.Transaction(pool);
+  try {
+    await trx.begin();
+
+    // 2) Inserción cabecera con id_alumno
+    const headerReq = new sql.Request(trx)
+      .input('tarea',           sql.Int,        parseInt(tareaId,10))
+      .input('alumno',          sql.Int,        parseInt(id_alumno,10))
+      .input('cliente',         sql.NVarChar(100), cliente_nombre)
+      .input('fecha',           sql.Date,       fecha)
+      .input('direccion',       sql.NVarChar(200), direccion)
+      .input('tipo',            sql.NVarChar(50),  doc_modifica_tipo)
+      .input('serie',           sql.NVarChar(50),  serie_numero)
+      .input('fechaOrig',       sql.Date,       fecha_original)
+      .input('motivo',          sql.NVarChar(300), motivo_modificacion);
+
+    const hdr = await headerReq.query(`
+      INSERT INTO nota_credito (
+        id_tarea, id_alumno,
+        cliente_nombre, fecha_emision, direccion,
+        doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
+        motivo_modificacion
+      )
+      OUTPUT INSERTED.id_nota
+      VALUES (
+        @tarea, @alumno,
+        @cliente, @fecha, @direccion,
+        @tipo,    @serie,  @fechaOrig,
+        @motivo
+      );
+    `);
+    const idNota = hdr.recordset[0].id_nota;
+
+    // 3) Inserción de cada detalle
+    for (let d of detalles) {
+      await new sql.Request(trx)
+        .input('nota',           sql.Int,        idNota)
+        .input('item',           sql.Int,        parseInt(d.item,10) || 0)
+        .input('codigo',         sql.NVarChar(50), d.codigo)
+        .input('cantidad',       sql.Int,        d.cantidad)
+        .input('descripcion',    sql.NVarChar(200), d.descripcion)
+        .input('precio_unitario',sql.Decimal(10,2), d.precio_unitario)
+        .input('descuento',      sql.Decimal(10,2), d.descuento)
+        .input('valor_venta',    sql.Decimal(10,2), d.valor_venta)
+        .query(`
+          INSERT INTO nota_credito_detalle (
+            id_nota, item, codigo, cantidad,
+            descripcion, precio_unitario, descuento, valor_venta
+          ) VALUES (
+            @nota, @item, @codigo, @cantidad,
+            @descripcion, @precio_unitario, @descuento, @valor_venta
+          );
+        `);
+    }
+
+    await trx.commit();
+    res.status(201).json({ mensaje:'Nota de crédito guardada', id_nota:idNota });
+
+  } catch(err) {
+    await trx.rollback();
+    console.error(err);
+    if (err.status) return res.status(err.status).json({ error: err.msg });
+    res.status(500).json({ error:'Error del servidor' });
+  }
+});
+
+app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
+  const { tareaId } = req.params;
+  const {
+    id_alumno,
+    dia, mes, anio,
+    cliente_nombre, cliente_nit, cliente_direccion,
+    venta_cta_de, son_texto,
+    detalles
+  } = req.body;
+
+  // 1) Validaciones básicas
+  if (!id_alumno) return res.status(400).json({ error:'Falta id_alumno' });
+  for (let [k,v] of [
+    ['dia', dia], ['mes', mes], ['anio', anio],
+    ['cliente_nombre', cliente_nombre]
+  ]) {
+    if (v == null || v === '' ) return res.status(400).json({ error:`${k} es obligatorio` });
+  }
+  if (!Array.isArray(detalles) || detalles.length === 0)
+    return res.status(400).json({ error:'Debes enviar al menos un detalle' });
+  detalles.forEach((d,i) => {
+    if (!d.descripcion || !d.descripcion.trim())
+      throw { status:400, msg:`Falta descripción en detalle #${i+1}` };
+    if (d.cantidad < 0 || d.precio_unitario < 0 ||
+        d.venta_no_sujeta < 0 || d.venta_exenta < 0 || d.venta_gravada < 0)
+      throw { status:400, msg:`Valores inválidos en detalle #${i+1}` };
+  });
+
+  const pool = await poolPromise;
+  const trx  = new sql.Transaction(pool);
+  try {
+    await trx.begin();
+
+    // Inserta cabecera
+    const hdrReq = new sql.Request(trx)
+      .input('tarea',      sql.Int,         parseInt(tareaId,10))
+      .input('alumno',     sql.Int,         parseInt(id_alumno,10))
+      .input('dia',        sql.TinyInt,     dia)
+      .input('mes',        sql.TinyInt,     mes)
+      .input('anio',       sql.SmallInt,    anio)
+      .input('cliente',    sql.NVarChar(100), cliente_nombre)
+      .input('nit',        sql.NVarChar(20),  cliente_nit)
+      .input('direccion',  sql.NVarChar(200), cliente_direccion)
+      .input('cta',        sql.NVarChar(100), venta_cta_de)
+      .input('son',        sql.NVarChar(300), son_texto);
+
+    const hdr = await hdrReq.query(`
+      INSERT INTO FacturaConsumidorFinal (
+        Dia, Mes, Anio,
+        NombreCliente, DUI_o_NIT, Direccion, VentaCuentaDe,
+        SonTexto, id_tarea, id_alumno
+      )
+      OUTPUT INSERTED.IdFactura
+      VALUES (
+        @dia, @mes, @anio,
+        @cliente, @nit, @direccion, @cta,
+        @son, @tarea, @alumno
+      );
+    `);
+    const idFactura = hdr.recordset[0].IdFactura;
+
+    // Inserta detalles
+    for (let d of detalles) {
+      await new sql.Request(trx)
+        .input('factura',       sql.Int,       idFactura)
+        .input('cantidad',      sql.Int,       d.cantidad)
+        .input('descripcion',   sql.NVarChar(200), d.descripcion)
+        .input('pu',            sql.Decimal(10,2), d.precio_unitario)
+        .input('vns',           sql.Decimal(10,2), d.venta_no_sujeta)
+        .input('ve',            sql.Decimal(10,2), d.venta_exenta)
+        .input('vg',            sql.Decimal(10,2), d.venta_gravada)
+        .query(`
+          INSERT INTO DetalleFacturaConsumidorFinal (
+            IdFactura, Cantidad, Descripcion,
+            PrecioUnitario, VentaNoSujeta, VentaExenta, VentaGravada
+          )
+          VALUES (
+            @factura, @cantidad, @descripcion,
+            @pu, @vns, @ve, @vg
+          );
+        `);
+    }
+
+    await trx.commit();
+    res.status(201).json({ mensaje:'Factura guardada', IdFactura:idFactura });
+  } catch(err) {
+    await trx.rollback();
+    console.error(err);
+    if (err.status) return res.status(err.status).json({ error: err.msg });
+    res.status(500).json({ error:'Error del servidor' });
+  }
+});
+
+app.get('/notas/usuario/:alumnoId', requireLogin, async (req, res) => {
+  const { alumnoId } = req.params;
+  try {
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input('alumnoId', sql.Int, parseInt(alumnoId, 10))
+      .query(`
+        SELECT 
+          t.id                AS tareaId,
+          t.tipo_tarea        AS tipo,
+          cf.nota             AS nota
+        FROM tareas t
+        JOIN credito_fiscal cf 
+          ON cf.id_tarea   = t.id
+         AND cf.id_alumno  = @alumnoId
+        WHERE cf.nota IS NOT NULL
+
+        UNION ALL
+
+        SELECT 
+          t.id               AS tareaId,
+          t.tipo_tarea       AS tipo,
+          nc.nota            AS nota
+        FROM tareas t
+        JOIN nota_credito nc
+          ON nc.id_tarea    = t.id
+         AND nc.id_alumno   = @alumnoId
+        WHERE nc.nota IS NOT NULL
+
+        UNION ALL
+
+        SELECT 
+          t.id               AS tareaId,
+          t.tipo_tarea       AS tipo,
+          fcf.nota           AS nota
+        FROM tareas t
+        JOIN FacturaConsumidorFinal fcf
+          ON fcf.id_tarea   = t.id
+         AND fcf.id_alumno  = @alumnoId
+        WHERE fcf.nota IS NOT NULL
+
+        ORDER BY tareaId;
+      `);
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error('Error al obtener notas de usuario:', err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

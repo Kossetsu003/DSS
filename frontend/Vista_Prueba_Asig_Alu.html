@@ -1,145 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="../frontend/assets/sesion.js"></script>
-    <title>Document</title>
-</head>
-<body>
-    <!-- component -->
-<!DOCTYPE html>
 <html lang="es">
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Agregar estilos para la vista de dispositivos pequeños */
-        @media (max-width: 768px) {
-            .flex-wrap {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .section-small {
-                width: 50%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
+  <script src="../frontend/assets/sesion.js" defer></script>
+  <script src="../frontend/assets/cerrarSesion.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <title>Pruebas Asignadas</title>
+  <style>
+    @media (max-width: 768px) {
+      .flex-wrap { display: flex; flex-wrap: wrap; }
+      .section-small { width: 50%; }
+    }
+  </style>
 </head>
-<body>
-<div class="flex flex-col h-screen bg-gray-100">
+<body class="flex flex-col h-screen bg-gray-100">
 
-    <!-- Barra de navegación superior -->
-    <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
-        <div class="flex items-center">
-            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
-               
-                <h2 class="font-bold text-xl">FactuEdu</h2>
-            </div>
-            <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
-                <button id="menuBtn">
-                    <i class="fas fa-bars text-gray-500 text-lg"></i> <!-- Ícono de menú -->
-                </button>
-            </div>
-        </div>
+  <!-- Barra superior -->
+  <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
+    <h2 class="font-bold text-xl">FactuEdu</h2>
+  </div>
 
-        <!-- Ícono de Notificación y Perfil -->
-        <div class="space-x-5">
-            <button>
-                
-            </button>
-            <!-- Botón de Perfil -->
-            <button>
-                
-            </button>
-        </div>
+  <div class="flex-1 flex">
+    <!-- Sidebar -->
+    <div id="sideNav" class="p-2 bg-white w-60 flex flex-col hidden md:flex">
+      <nav>
+        <a href="Vista_Prueba_Asig_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-users mr-2"></i>Pruebas asignadas
+        </a>
+        <a href="Vista_Calificacion_Alu.html"
+           class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+          <i class="fas fa-file-alt mr-2"></i>Calificación
+        </a>
+        <a id="logoutBtn" href="#"
+           class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto">
+          <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+        </a>
+      </nav>
+      <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY</p>
     </div>
 
-    <!-- Contenido principal -->
-    <div class="flex-1 flex">
-        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
-        <div class="p-2 bg-white w-60 flex flex-col hidden md:flex" id="sideNav">
-            <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Prueba_Asig_Alu.html">
-                    <i class="fas fa-users mr-2"></i>Pruebas asignadas
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificacion_Alu.html">
-                    <i class="fas fa-file-alt mr-2"></i>Calificacion
-                </a>
-               <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-            </a>
-            </nav>
+    <!-- Área principal -->
+    <div class="flex-1 p-4 overflow-auto">
+      <div class="bg-white p-4 rounded-md">
+        <h2 class="text-gray-500 text-lg font-semibold pb-4">Pruebas asignadas</h2>
+        <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div>
 
-            
-
-            <!-- Señalador de ubicación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
-
-            <!-- Copyright al final de la navegación lateral -->
-            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
-
-        </div>
-
-        <!-- Área de contenido principal -->
-       
-
-          <!-- Área de contenido principal -->
-        <div class="flex-1 p-4">
-           
-              <!-- component -->
-
-        
-            <!-- Contenedor) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
-               
-            
-            
-            <div class="bg-white p-4 rounded-md">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Pruebas asignadas</h2>
-                <div class="my-1"></div> <!-- Espacio de separación -->
-                <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-                <table class="w-full table-auto text-sm">
-                    <thead>
-                        <tr class="text-sm leading-normal">
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Prueba</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Calificar</th>
-                        </tr>
-                    
-     
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light text-center">Credito fiscal</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center"><a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-green-400 hover:to-green-300 hover:text-white mt-auto" href="#">Realizar</a></td>
-                        </tr>
-                                                <!-- Añade más filas aquí como la anterior-->
-                      
-                    </tbody>
-                    </table>
-                
-                </div>
-
-               
-                </div>
-                </div>
-            </div>
-        </div>
+        <table class="w-full table-auto text-sm">
+          <thead>
+            <tr class="text-sm leading-normal">
+              <th class="py-2 px-4 border-b font-bold uppercase">Prueba</th>
+              <th class="py-2 px-4 border-b font-bold uppercase">Sección</th>
+              <th class="py-2 px-4 border-b font-bold uppercase">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tareas-body">
+            <tr><td colspan="3" class="text-center py-2">Cargando…</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
-</div>
+  </div>
 
-            </div>
-        </div>
-    </div>
-</div>
+  <script>
+    // Traduce el tipo de tarea a texto
+    function textoTipo(t) {
+      switch (t) {
+        case 1: return 'Crédito fiscal';
+        case 2: return 'Factura cliente final';
+        case 3: return 'Nota de crédito';
+        default: return 'Desconocido';
+      }
+    }
 
+    // Devuelve la URL de la vista según el tipo de tarea
+    function urlPorTipo(t, id) {
+      switch (t) {
+        case 1: return `Vista_Form_Credito_Fiscal.html?tarea=${id}`;
+        case 2: return `Vista_Form_Consumidor_Final.html?tarea=${id}`;
+        case 3: return `Vista_Form_Nota_Credito.html?tarea=${id}`;
+        default: return `#`;
+      }
+    }
 
+    // Carga y renderiza las tareas asignadas al alumno
+    async function cargarTareas() {
+      const alumnoId = localStorage.getItem('id');
+      const tbody = document.getElementById('tareas-body');
 
+      if (!alumnoId) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500">No autenticado</td></tr>';
+        return;
+      }
 
+      try {
+        const res = await fetch(`http://localhost:4000/tareas/usuario/${alumnoId}`, {
+          credentials: 'include'
+        });
+        const tareas = await res.json();
+
+        if (!res.ok) {
+          tbody.innerHTML = `<tr><td colspan="3" class="text-center text-red-500">${tareas.error}</td></tr>`;
+          return;
+        }
+        if (tareas.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" class="text-center">No tienes tareas asignadas</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = tareas.map(t => {
+          if (t.realizado) {
+            return `
+              <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b text-center">${textoTipo(t.tipo_tarea)}</td>
+                <td class="py-2 px-4 border-b text-center">${t.seccion_nombre} (${t.seccion_anio})</td>
+                <td class="py-2 px-4 border-b text-center">
+                  <span class="px-3 py-1 bg-gray-300 text-gray-700 rounded">Realizado</span>
+                </td>
+              </tr>`;
+          } else {
+            return `
+              <tr class="hover:bg-gray-100">
+                <td class="py-2 px-4 border-b text-center">${textoTipo(t.tipo_tarea)}</td>
+                <td class="py-2 px-4 border-b text-center">${t.seccion_nombre} (${t.seccion_anio})</td>
+                <td class="py-2 px-4 border-b text-center">
+                  <a href="${urlPorTipo(t.tipo_tarea, t.id)}"
+                     class="py-1 px-3 rounded bg-green-500 text-white hover:bg-green-600">
+                    Realizar
+                  </a>
+                </td>
+              </tr>`;
+          }
+        }).join('');
+      } catch (err) {
+        console.error('Error al cargar tareas:', err);
+        tbody.innerHTML =
+          '<tr><td colspan="3" class="text-center text-red-500">Error de conexión.</td></tr>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarTareas);
+  </script>
 </body>
-</html>
-</body>
-<script src="../frontend/assets/cerrarSesion.js"></script>
 </html>
