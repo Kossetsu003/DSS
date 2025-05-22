@@ -19,17 +19,39 @@
     </div>
 
     <div class="flex flex-1">
-        <!-- Sidebar -->
-        <aside id="sideNav" class="hidden md:flex flex-col w-60 bg-gray-100 p-2">
-            <nav class="space-y-2">
-                <a href="Vista_Select_Prueba_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Asignar
-                    prueba</a>
-                <a href="Vista_Calificar_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Calificar</a>
-                <a href="Vista_Notas_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Ver notas</a>
-                <a href="Vista_Crear_Grupo_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Crear grupo</a>
-                <button id="logoutBtn" class="mt-auto px-4 py-2 rounded hover:bg-red-300">Cerrar sesión</button>
+         <!-- Sidebar -->
+     <div class="flex-1 flex">
+        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
+        <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
+            <nav>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Select_Prueba_Doce.html">
+                    <i class="fas fa-users mr-2"></i>Asignar prueba
+                </a>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificar_Doce.html">
+                    <i class="fas fa-file-alt mr-2"></i>Calificar
+                </a>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Notas_Doce.html">
+                     <i class="fas fa-file-alt mr-2"></i>Ver notas 
+                </a>
+                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Crear_Grupo_Doce.html">
+                    <i class="fas fa-users mr-2"></i>Crear grupo
+                </a>
+                <!-- Ítem de Cerrar Sesión -->
+            <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
+                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+            </a>
             </nav>
-        </aside>
+
+
+
+
+            <!-- Señalador de ubicación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+
+            <!-- Copyright al final de la navegación lateral -->
+            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
+
+        </div>
 
         <!-- Main -->
         <main class="flex-1 p-4 overflow-auto">
@@ -87,7 +109,20 @@
             }
         }
 
-        // 2) Carga entregas calificadas al cambiar la sección
+        // Mapeo de nombres de prueba a nombres de archivo
+        const archivoPorPrueba = {
+            'Factura Consumidor Final': 'Consumidor_Final',
+            'Nota de Crédito': 'Nota_Credito',
+            'Crédito Fiscal': 'Credito_Fiscal'
+        };
+
+        function nombreArchivoPrueba(prueba) {
+            // Si está en el mapa, usa el valor mapeado, si no, limpia el texto
+            return archivoPorPrueba[prueba] || limpiarTexto(prueba);
+        }
+
+        // ...existing code...
+
         async function cargarEntregas(seccionId) {
             const tbody = document.getElementById('entregas-body');
             if (!seccionId) {
@@ -97,7 +132,7 @@
             tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Cargando…</td></tr>';
             try {
                 const res = await fetch(`http://localhost:4000/entregas/seccion/${seccionId}`, {
-                    credentials: 'include' // <-- Esto permite enviar la cookie de sesión
+                    credentials: 'include'
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Error servidor');
@@ -112,7 +147,7 @@
         <td class="border px-2 py-1">${e.prueba}</td>
         <td class="border px-2 py-1 text-center">${e.nota.toFixed(1)}</td>
         <td class="border px-2 py-1 text-center">
-          <a href="Vista_Form_${e.prueba.replace(/\s+/g, '_')}_Doce.html?tarea=${e.tareaId}&alumno=${e.alumnoId}"
+          <a href="Vista_Form_${nombreArchivoPrueba(e.prueba)}_Doce.html?tarea=${e.tareaId}&alumno=${e.alumnoId}"
              class="px-3 py-1 bg-blue-500 text-white rounded">Ver</a>
         </td>
       </tr>
