@@ -11,14 +11,8 @@
   <title>Ver Nota de Crédito</title>
   <style>
     @media (max-width: 768px) {
-      .flex-wrap {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      .section-small {
-        width: 50%;
-      }
+      .flex-wrap { display: flex; flex-wrap: wrap; }
+      .section-small { width: 50%; }
     }
   </style>
 </head>
@@ -26,45 +20,19 @@
 <body class="flex flex-col h-screen bg-gray-100">
 
   <div class="flex-1 flex">
-    <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
+    <!-- Sidebar -->
     <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
       <nav>
-        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
-          href="../frontend/Vista_Select_Prueba_Doce.html">
-          <i class="fas fa-users mr-2"></i>Asignar prueba
-        </a>
-        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
-          href="../frontend/Vista_Calificar_Doce.html">
-          <i class="fas fa-file-alt mr-2"></i>Calificar
-        </a>
-        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
-          href="../frontend/Vista_Notas_Doce.html">
-          <i class="fas fa-file-alt mr-2"></i>Ver notas
-        </a>
-        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
-          href="../frontend/Vista_Crear_Grupo_Doce.html">
-          <i class="fas fa-users mr-2"></i>Crear grupo
-        </a>
-        <!-- Ítem de Cerrar Sesión -->
-        <a id="logoutBtn"
-          class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto"
-          href="#">
-          <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-        </a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Select_Prueba_Doce.html"><i class="fas fa-users mr-2"></i>Asignar prueba</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Calificar_Doce.html"><i class="fas fa-file-alt mr-2"></i>Calificar</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Notas_Doce.html"><i class="fas fa-file-alt mr-2"></i>Ver notas</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Crear_Grupo_Doce.html"><i class="fas fa-users mr-2"></i>Crear grupo</a>
+        <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión</a>
       </nav>
-
-
-
-
-      <!-- Señalador de ubicación -->
       <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
-
-      <!-- Copyright al final de la navegación lateral -->
-      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
-
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY</p>
     </div>
-
-
+    <!-- Contenido principal -->
     <div class="flex-1 p-4 overflow-auto">
       <form id="viewNotaCredito" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
         <!-- 1. Encabezado -->
@@ -73,53 +41,56 @@
             <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20" />
             <div class="text-sm">
               <p class="font-semibold">FactuEdu</p>
-              <p>Datos…</p>
+              <p>OFICINA: Av. Jerusales 48°, Calle los pinos<br>
+                 Teléfono: 600-0234 • correo: contacto@linio.com</p>
             </div>
           </div>
-          <div class="flex flex-col items-center border rounded bg-gray-50 p-3">
-            <p class="font-semibold">NOTA DE CRÉDITO</p>
-            <p class="text-4xl font-bold text-red-600">001-000777</p>
+          <div class="flex flex-col items-center border rounded-lg p-3 bg-gray-50">
+            <p class="font-semibold text-sm">NOTA DE CRÉDITO</p>
+            <p id="serieNumero" class="text-4xl font-bold text-red-600">000-000000</p>
+            <p id="ruc" class="text-xs">R.U.C. -----------</p>
           </div>
         </header>
 
-        <!-- 2. Cliente y doc modificado -->
+        <!-- 2. Datos del cliente y documento modificado -->
         <section class="mt-4 space-y-3 text-sm">
           <div class="grid gap-4 md:grid-cols-2">
             <label class="flex flex-col">
               Señor(es)
-              <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+              <input id="cliente" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
             </label>
             <label class="flex flex-col">
-              Fecha emisión
-              <input type="date" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+              Fecha de emisión
+              <input id="fechaEmision" type="date" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
             </label>
           </div>
           <label class="flex flex-col">
             Dirección
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+            <input id="direccion" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
           </label>
           <div class="grid gap-4 md:grid-cols-3">
             <label class="flex flex-col">
-              Tipo doc modif.
-              <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+              Doc. que modifica (tipo)
+              <input id="docTipo" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
             </label>
             <label class="flex flex-col">
-              Serie y Nº
-              <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+              Serie y Número
+              <input id="serieNum" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
             </label>
             <label class="flex flex-col">
-              Fecha orig.
-              <input type="date" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
+              Fecha original
+              <input id="fechaOriginal" type="date" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1" />
             </label>
           </div>
         </section>
 
         <!-- 3. Detalle de ítems -->
         <section class="mt-6">
+          <h3 class="font-semibold mb-2 text-sm">Detalle de ítems</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-xs border-collapse">
-              <thead>
-                <tr class="bg-gray-200">
+              <thead class="bg-gray-200">
+                <tr>
                   <th class="px-1 py-1">ITEM</th>
                   <th class="px-1 py-1">CÓDIGO</th>
                   <th class="px-1 py-1">CANT.</th>
@@ -129,25 +100,124 @@
                   <th class="px-1 py-1">VALOR VENTA</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- Se rellenará con JS -->
+              <tbody id="detalleRows">
+                <!-- Rellenado por JS -->
               </tbody>
             </table>
           </div>
         </section>
 
-        <!-- 4. Calificación -->
+        <!-- 4. Motivo de modificación y totales -->
+        <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <label class="flex flex-col">
+              Motivo de la modificación
+              <textarea id="motivo" rows="2" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"></textarea>
+            </label>
+          </div>
+          <div class="border rounded p-3 space-y-1">
+            <div class="flex justify-between">
+              <span>Sub-Total</span>
+              <input id="subTotal" readonly class="w-24 text-right rounded border bg-gray-100 px-2 py-1" />
+            </div>
+            <div class="flex justify-between">
+              <span>I.G.V. (%)</span>
+              <input id="igv" readonly class="w-24 text-right rounded border bg-gray-100 px-2 py-1" />
+            </div>
+            <div class="flex justify-between font-bold">
+              <span>Total</span>
+              <input id="total" readonly class="w-24 text-right rounded border bg-gray-100 px-2 py-1" />
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Firmas -->
+        <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+          <div class="border rounded p-3">
+            <p class="font-medium mb-2">ADQUIRENTE O USUARIO</p>
+            <div class="text-center italic">Firma pendiente</div>
+          </div>
+          <div class="border rounded p-3">
+            <p class="font-medium mb-2">EMISOR</p>
+            <div class="text-center italic">Firma pendiente</div>
+          </div>
+        </section>
+
+        <!-- 6. Calificación -->
         <div class="mt-6 flex items-center justify-between">
-          <label class="flex items-center gap-2">
+          <label class="flex items-center gap-2 text-sm">
             Calificar:
-            <input id="nota" type="number" min="0" max="100" class="ml-2 w-20 rounded border px-2 py-1" />
+            <input id="nota" type="number" min="0" max="10" step="0.1" class="ml-2 w-24 rounded border px-2 py-1" />
           </label>
-          <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button id="btnGuardarNota" type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Guardar calificación
           </button>
         </div>
       </form>
     </div>
-</body>
+  </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(location.search);
+      const tarea = params.get('tarea');
+      const alumno = params.get('alumno');
+      if (!tarea || !alumno) return alert('Falta tarea o alumno en la URL.');
+
+      // Fetch header + details
+      let res = await fetch(`http://localhost:4000/formulario/nota-credito/${tarea}/${alumno}`, {
+        credentials: 'include'
+      });
+      if (!res.ok) return alert('Error cargando datos');
+      const data = await res.json();
+
+      // Populate header
+      document.getElementById('cliente').value            = data.cliente_nombre || '';
+      document.getElementById('fechaEmision').value      = data.fecha_emision?.split('T')[0] || '';
+      document.getElementById('direccion').value         = data.direccion || '';
+      document.getElementById('docTipo').value           = data.doc_modifica_tipo || '';
+      document.getElementById('serieNum').value          = data.doc_modifica_serie_numero || '';
+      document.getElementById('fechaOriginal').value     = data.fecha_original?.split('T')[0] || '';
+      document.getElementById('motivo').value            = data.motivo_modificacion || '';
+      document.getElementById('subTotal').value          = data.subtotal?.toFixed(2) || '';
+      document.getElementById('igv').value               = data.igv?.toFixed(2) || '';
+      document.getElementById('total').value             = data.total?.toFixed(2) || '';
+      document.getElementById('serieNumero').textContent = data.doc_modifica_serie_numero || '---';
+      document.getElementById('ruc').textContent         = `R.U.C. ${data.ruc || '----------'}`;
+
+      // Populate details table
+      const tbl = document.getElementById('detalleRows');
+      tbl.innerHTML = data.detalles.map(d => `
+        <tr>
+          <td class="px-1 py-1">${d.item}</td>
+          <td class="px-1 py-1">${d.codigo}</td>
+          <td class="px-1 py-1 text-center">${d.cantidad}</td>
+          <td class="px-1 py-1">${d.descripcion}</td>
+          <td class="px-1 py-1 text-right">${d.precio_unitario.toFixed(2)}</td>
+          <td class="px-1 py-1 text-right">${d.descuento.toFixed(2)}</td>
+          <td class="px-1 py-1 text-right">${d.valor_venta.toFixed(2)}</td>
+        </tr>`).join('');
+
+      // Load existing grade
+      if (data.nota != null) document.getElementById('nota').value = data.nota;
+
+      // Save grade
+      document.getElementById('btnGuardarNota').onclick = async () => {
+        const nota = parseFloat(document.getElementById('nota').value);
+        if (isNaN(nota) || nota < 0 || nota > 10) {
+          return alert('La nota debe estar entre 0 y 10.');
+        }
+        let resp = await fetch(`http://localhost:4000/calificar/nota-credito/${tarea}/${alumno}`, {
+          method: 'POST',
+          headers:{ 'Content-Type':'application/json' },
+          credentials:'include',
+          body: JSON.stringify({ nota })
+        });
+        const j = await resp.json();
+        if (!resp.ok) return alert(j.error||'Error al guardar nota');
+        alert('Nota guardada correctamente');
+      };
+    });
+  </script>
+</body>
 </html>

@@ -444,9 +444,16 @@ app.post('/nota-credito/:tareaId', requireLogin, async (req, res) => {
   const { tareaId } = req.params;
   const {
     id_alumno,
-    cliente_nombre, fecha_emision: fecha, direccion,
-    doc_modifica_tipo, serie_numero, fecha_original,
+    cliente_nombre,
+    fecha_emision: fecha,
+    direccion,
+    doc_modifica_tipo,
+    serie_numero,
+    fecha_original,
     motivo_modificacion,
+    subtotal = 0,
+    igv = 0,
+    total = 0,
     detalles
   } = req.body;
 
@@ -475,53 +482,51 @@ app.post('/nota-credito/:tareaId', requireLogin, async (req, res) => {
   try {
     await trx.begin();
 
-    // 2) Inserción cabecera con id_alumno
+    // 2) Inserción cabecera con id_alumno y los totales
     const headerReq = new sql.Request(trx)
-      .input('tarea', sql.Int, parseInt(tareaId, 10))
-      .input('alumno', sql.Int, parseInt(id_alumno, 10))
-      .input('cliente', sql.NVarChar(100), cliente_nombre)
-      .input('fecha', sql.Date, fecha)
-      .input('direccion', sql.NVarChar(200), direccion)
-      .input('tipo', sql.NVarChar(50), doc_modifica_tipo)
-      .input('serie', sql.NVarChar(50), serie_numero)
-      .input('fechaOrig', sql.Date, fecha_original)
-      .input('motivo', sql.NVarChar(300), motivo_modificacion)
-      .input('subtotal', sql.Decimal(10, 2), req.body.subtotal || 0)
-      .input('igv', sql.Decimal(10, 2), req.body.igv || 0)
-      .input('total', sql.Decimal(10, 2), req.body.total || 0);
-
+      .input('tarea',       sql.Int,         parseInt(tareaId, 10))
+      .input('alumno',      sql.Int,         parseInt(id_alumno, 10))
+      .input('cliente',     sql.NVarChar(100), cliente_nombre)
+      .input('fecha',       sql.Date,        fecha)
+      .input('direccion',   sql.NVarChar(200), direccion)
+      .input('tipo',        sql.NVarChar(50),  doc_modifica_tipo)
+      .input('serie',       sql.NVarChar(50),  serie_numero)
+      .input('fechaOrig',   sql.Date,        fecha_original)
+      .input('motivo',      sql.NVarChar(300), motivo_modificacion)
+      .input('subtotal',    sql.Decimal(10, 2), subtotal)
+      .input('igv',         sql.Decimal(10, 2), igv)
+      .input('total',       sql.Decimal(10, 2), total);
 
     const hdr = await headerReq.query(`
       INSERT INTO nota_credito (
-  id_tarea, id_alumno,
-  cliente_nombre, fecha_emision, direccion,
-  doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
-  motivo_modificacion,
-  subtotal, igv, total
-)
-OUTPUT INSERTED.id_nota
-VALUES (
-  @tarea, @alumno,
-  @cliente, @fecha, @direccion,
-  @tipo,    @serie,  @fechaOrig,
-  @motivo,
-  @subtotal, @igv, @total
-);
-
+        id_tarea, id_alumno,
+        cliente_nombre, fecha_emision, direccion,
+        doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
+        motivo_modificacion,
+        subtotal, igv, total
+      )
+      OUTPUT INSERTED.id_nota
+      VALUES (
+        @tarea, @alumno,
+        @cliente, @fecha, @direccion,
+        @tipo,    @serie,  @fechaOrig,
+        @motivo,
+        @subtotal, @igv, @total
+      );
     `);
     const idNota = hdr.recordset[0].id_nota;
 
     // 3) Inserción de cada detalle
     for (let d of detalles) {
       await new sql.Request(trx)
-        .input('nota', sql.Int, idNota)
-        .input('item', sql.Int, parseInt(d.item, 10) || 0)
-        .input('codigo', sql.NVarChar(50), d.codigo)
-        .input('cantidad', sql.Int, d.cantidad)
-        .input('descripcion', sql.NVarChar(200), d.descripcion)
-        .input('precio_unitario', sql.Decimal(10, 2), d.precio_unitario)
-        .input('descuento', sql.Decimal(10, 2), d.descuento)
-        .input('valor_venta', sql.Decimal(10, 2), d.valor_venta)
+        .input('nota',           sql.Int,         idNota)
+        .input('item',           sql.Int,         parseInt(d.item, 10) || 0)
+        .input('codigo',         sql.NVarChar(50), d.codigo)
+        .input('cantidad',       sql.Int,         d.cantidad)
+        .input('descripcion',    sql.NVarChar(200), d.descripcion)
+        .input('precio_unitario',sql.Decimal(10,2), d.precio_unitario)
+        .input('descuento',      sql.Decimal(10,2), d.descuento)
+        .input('valor_venta',    sql.Decimal(10,2), d.valor_venta)
         .query(`
           INSERT INTO nota_credito_detalle (
             id_nota, item, codigo, cantidad,
@@ -535,7 +540,6 @@ VALUES (
 
     await trx.commit();
     res.status(201).json({ mensaje: 'Nota de crédito guardada', id_nota: idNota });
-
   } catch (err) {
     await trx.rollback();
     console.error(err);
@@ -543,6 +547,7 @@ VALUES (
     res.status(500).json({ error: 'Error del servidor' });
   }
 });
+
 
 app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
   const { tareaId } = req.params;
@@ -927,6 +932,81 @@ app.post('/formulario/factura-final/nota', requireLogin, async (req, res) => {
     res.status(500).json({ error: 'Error al guardar la nota' });
   }
 });
+
+// GET /formulario/nota-credito/:tareaId/:alumnoId
+app.get('/formulario/nota-credito/:tareaId/:alumnoId', requireLogin, async (req, res) => {
+  const { tareaId, alumnoId } = req.params;
+  const pool = await poolPromise;
+  try {
+    // Cabecera
+    const cab = await pool.request()
+      .input('tarea', sql.Int, tareaId)
+      .input('alumno', sql.Int, alumnoId)
+      .query(`
+        SELECT 
+          id_nota, id_tarea, id_alumno,
+          cliente_nombre, fecha_emision, direccion,
+          doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
+          motivo_modificacion,
+          subtotal, igv, total,
+          nota
+        FROM nota_credito
+        WHERE id_tarea = @tarea AND id_alumno = @alumno
+      `);
+    if (!cab.recordset.length) return res.status(404).json({ error: 'No encontrada' });
+    const datos = cab.recordset[0];
+
+    // Detalles
+    const det = await pool.request()
+      .input('id_nota', sql.Int, datos.id_nota)
+      .query(`
+        SELECT item, codigo, cantidad, descripcion,
+               precio_unitario, descuento, valor_venta
+        FROM nota_credito_detalle
+        WHERE id_nota = @id_nota
+        ORDER BY item
+      `);
+
+    res.json({
+      // campo “ruc” lo puedes rellenar hardcode o traerlo de otro lado si aplica
+      ruc: '20547836473',
+      ...datos,
+      detalles: det.recordset
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+// POST /calificar/nota-credito/:tareaId/:alumnoId
+app.post('/calificar/nota-credito/:tareaId/:alumnoId', requireLogin, async (req, res) => {
+  const { tareaId, alumnoId } = req.params;
+  const { nota } = req.body;
+  if (typeof nota !== 'number' || nota < 0 || nota > 10) {
+    return res.status(400).json({ error: 'La nota debe estar entre 0 y 10' });
+  }
+  const pool = await poolPromise;
+  try {
+    const result = await pool.request()
+      .input('nota', sql.Decimal(3,1), nota)
+      .input('tarea', sql.Int, tareaId)
+      .input('alumno', sql.Int, alumnoId)
+      .query(`
+        UPDATE nota_credito
+        SET nota = @nota
+        WHERE id_tarea = @tarea AND id_alumno = @alumno
+      `);
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ error: 'Registro no encontrado' });
+    }
+    res.json({ mensaje: 'Nota actualizada correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
