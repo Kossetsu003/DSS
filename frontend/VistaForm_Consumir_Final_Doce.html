@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
+  <script src="../frontend/assets/sesionDoce.js" defer></script>
+  <script src="../frontend/assets/cerrarSesion.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <title>Ver Factura Consumidor Final</title>
+  <style>
+    @media (max-width: 768px) { .flex-wrap{display:flex;flex-wrap:wrap;} .section-small{width:50%;} }
+  </style>
+</head>
+<body class="flex flex-col h-screen bg-gray-100">
+
+  <!-- NAV / SIDEBAR igual a tu plantilla original -->
+  <!-- … -->
+
+  <div class="flex-1 p-4 overflow-auto">
+    <form id="viewFactura" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
+      <!-- 1. Encabezado -->
+      <header class="grid gap-4 md:grid-cols-3 border-b pb-4">
+        <div class="col-span-2 flex items-center space-x-4">
+          <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 object-contain"/>
+          <div>
+            <h1 class="text-2xl font-semibold">Factu Edu</h1>
+            <p class="text-xs">Dirección… Giro…</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-center border rounded bg-gray-50 p-3">
+          <p class="font-semibold">FACTURA</p>
+          <p class="text-4xl font-bold text-red-600">No. 0001</p>
+          <p class="text-xs">N.R.C.… NIT.…</p>
+        </div>
+      </header>
+
+      <!-- 2. Fecha -->
+      <section class="mt-4 grid grid-cols-3 gap-2 text-sm">
+        <label class="flex flex-col">
+          Día
+          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
+        </label>
+        <label class="flex flex-col">
+          Mes
+          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
+        </label>
+        <label class="flex flex-col">
+          Año
+          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
+        </label>
+      </section>
+
+      <!-- 3. Datos cliente -->
+      <section class="mt-4 space-y-2 text-sm">
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="flex flex-col">
+            Nombre
+            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
+          </label>
+          <label class="flex flex-col">
+            D.U.I. / N.I.T.
+            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
+          </label>
+        </div>
+        <label class="flex flex-col">
+          Dirección
+          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
+        </label>
+        <label class="flex flex-col">
+          Venta a cuenta de
+          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
+        </label>
+      </section>
+
+      <!-- 4. Detalle -->
+      <section class="mt-6">
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs border-collapse">
+            <thead>
+              <tr class="bg-gray-200">
+                <th class="border px-1 py-1">CANT.</th>
+                <th class="border px-1 py-1">DESCRIPCIÓN</th>
+                <th class="border px-1 py-1">P. UNITARIO</th>
+                <th class="border px-1 py-1">VENTA NO SUJ.</th>
+                <th class="border px-1 py-1">VENTA EXENTAS</th>
+                <th class="border px-1 py-1">VENTA GRAVADAS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Se rellenará con JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 5. Calificación -->
+      <div class="mt-6 flex items-center justify-between">
+        <label class="flex items-center gap-2">
+          Calificar:
+          <input id="nota" type="number" min="0" max="100" class="ml-2 w-20 rounded border px-2 py-1"/>
+        </label>
+        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Guardar calificación
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
