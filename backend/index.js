@@ -60,6 +60,8 @@ app.post('/login', async (req, res) => {
       rol: usuario.rol
     };
 
+    console.log(req.session.user);
+
     res.json({ message: 'Login exitoso', rol: usuario.rol, id: usuario.id });
   } catch (err) {
     console.error('Error en /login:', err);
@@ -1007,6 +1009,80 @@ app.post('/calificar/nota-credito/:tareaId/:alumnoId', requireLogin, async (req,
   }
 });
 
+app.get('/entregas/seccion/:seccionId', requireLogin, async (req, res) => {
+  const { seccionId } = req.params;
+  const profesorId = req.session.user.id;
+  try {
+    const pool = await poolPromise;
+
+    // Tareas de tipo Crédito Fiscal
+    const cf = await pool.request()
+      .input('sec', sql.Int, seccionId)
+      .input('prof', sql.Int, profesorId)
+      .query(`
+        SELECT 
+          u.codigo AS carnet,
+          u.nombre,
+          'Crédito Fiscal' AS prueba,
+          cf.nota,
+          t.id           AS tareaId,
+          u.id           AS alumnoId
+        FROM credito_fiscal cf
+        JOIN tareas t         ON cf.id_tarea = t.id
+        JOIN usuarios u       ON cf.id_alumno = u.id
+        WHERE t.id_seccion = @sec
+          AND t.id_maestro = @prof
+          AND cf.nota IS NOT NULL
+      `);
+
+    // Factura Consumidor Final
+    const fcf = await pool.request()
+      .input('sec', sql.Int, seccionId)
+      .input('prof', sql.Int, profesorId)
+      .query(`
+        SELECT 
+          u.codigo AS carnet,
+          u.nombre,
+          'Factura Consumidor Final' AS prueba,
+          fcf.nota,
+          t.id           AS tareaId,
+          u.id           AS alumnoId
+        FROM FacturaConsumidorFinal fcf
+        JOIN tareas t         ON fcf.id_tarea = t.id
+        JOIN usuarios u       ON fcf.id_alumno = u.id
+        WHERE t.id_seccion = @sec
+          AND t.id_maestro = @prof
+          AND fcf.nota IS NOT NULL
+      `);
+
+    // Nota de Crédito
+    const nc = await pool.request()
+      .input('sec', sql.Int, seccionId)
+      .input('prof', sql.Int, profesorId)
+      .query(`
+        SELECT 
+          u.codigo AS carnet,
+          u.nombre,
+          'Nota de Crédito' AS prueba,
+          nc.nota,
+          t.id           AS tareaId,
+          u.id           AS alumnoId
+        FROM nota_credito nc
+        JOIN tareas t         ON nc.id_tarea = t.id
+        JOIN usuarios u       ON nc.id_alumno = u.id
+        WHERE t.id_seccion = @sec
+          AND t.id_maestro = @prof
+          AND nc.nota IS NOT NULL
+      `);
+
+    // Unir los tres conjuntos
+    const entregas = [...cf.recordset, ...fcf.recordset, ...nc.recordset];
+    res.json(entregas);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener entregas' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);

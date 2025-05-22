@@ -1,188 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="../frontend/assets/sesionDoce.js"></script>
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
+    <script src="../frontend/assets/sesionDoce.js" defer></script>
+    <script src="../frontend/assets/cerrarSesion.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <title>Calificar Entregas</title>
 </head>
-<body>
-    <!-- component -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Agregar estilos para la vista de dispositivos pequeños */
-        @media (max-width: 768px) {
-            .flex-wrap {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .section-small {
-                width: 50%;
-            }
-        }
-    </style>
-</head>
-<body>
-<div class="flex flex-col h-screen ">
 
-    <!-- Barra de navegación superior -->
-    <div class="bg-gray-100 text-white shadow w-full p-2 flex items-center justify-between">
-        <div class="flex items-center">
-            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
-               
-                <h2 class="font-bold text-xl text-gray-500">Nombre de la Aplicación</h2>
-            </div>
-            <div class="md:hidden flex items-center"> <!-- Se muestra solo en dispositivos pequeños -->
-                <button id="menuBtn">
-                    <i class="fas fa-bars text-gray-500 text-lg"></i> <!-- Ícono de menú -->
-                </button>
-            </div>
-        </div>
+<body class="flex flex-col h-screen">
 
-        <div class="space-x-5">
-        </div>
+    <!-- Top bar -->
+    <div class="bg-gray-100 text-gray-500 shadow p-2 flex justify-between items-center">
+        <h2 class="text-xl font-bold">FactuEdu</h2>
     </div>
 
-      <!-- Contenido principal -->
-    <div class="flex-1 flex">
-        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
-        <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
-            <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Select_Prueba_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Asignar prueba
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificar_Doce.html">
-                    <i class="fas fa-file-alt mr-2"></i>Calificar
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Notas_Doce.html">
-                     <i class="fas fa-file-alt mr-2"></i>Ver notas 
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Crear_Grupo_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Crear grupo
-                </a>
-                <!-- Ítem de Cerrar Sesión -->
-            <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-            </a>
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside id="sideNav" class="hidden md:flex flex-col w-60 bg-gray-100 p-2">
+            <nav class="space-y-2">
+                <a href="Vista_Select_Prueba_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Asignar
+                    prueba</a>
+                <a href="Vista_Calificar_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Calificar</a>
+                <a href="Vista_Notas_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Ver notas</a>
+                <a href="Vista_Crear_Grupo_Doce.html" class="block px-4 py-2 rounded hover:bg-cyan-300">Crear grupo</a>
+                <button id="logoutBtn" class="mt-auto px-4 py-2 rounded hover:bg-red-300">Cerrar sesión</button>
             </nav>
+        </aside>
 
+        <!-- Main -->
+        <main class="flex-1 p-4 overflow-auto">
+            <div class="max-w-2xl mx-auto bg-white p-6 shadow rounded-lg">
+                <h1 class="text-2xl font-semibold mb-4">Calificar Entregas</h1>
 
-
-
-            <!-- Señalador de ubicación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
-
-            <!-- Copyright al final de la navegación lateral -->
-            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
-
-        </div>
-
-        <!-- Área de contenido principal -->
-        <div class="flex-1 p-4">
-           
-              <!-- component -->
-<div class="transition-colors duration-300">
-    <div class="container mx-auto p-4">
-        <div class="bg-white  shadow rounded-lg p-6">
-            <h1 class="text-xl font-semibold mb-4 text-gray-900 ">FactuEdu</h1>
-            <!-- Option -->
-            <p class="text-gray-600  mb-6">Seleccione una sección</p>
-            <form>
-                 <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                        <option>Seccion 3B</option>
-                        <option>Seccion 3A</option>
-                        
+                <!-- Selección de sección -->
+                <div class="mb-6">
+                    <label class="block mb-2 font-medium">Seleccione una sección:</label>
+                    <select id="select-seccion" class="w-full border rounded p-2">
+                        <option value="">-- selecciona --</option>
                     </select>
                 </div>
-                <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
-                    Guardar 
-                </button>
-            </form>
-        </div>
-    </div>
-  </div>
-        
-            <!-- Contenedor) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
-               
-            
-            
-            <div class="bg-white p-4 rounded-md">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Calificaciones Credito fiscal 3 A</h2>
-                <div class="my-1"></div> <!-- Espacio de separación -->
-                <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-                <table class="w-full table-auto text-sm">
-                    <thead>
-                        <tr class="text-sm leading-normal">
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Carnet</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Nombre</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Calificaciones</th>
-                        </tr>
-                    
-     
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">6.5</td>
-                        </tr>
-                        <!-- Añade más filas aquí como la anterior para cada autorización pendiente -->
-                      
-                    </tbody>
-                    </table>
-                    <!-- Botón "Ver más" para la tabla de Autorizaciones Pendientes -->
-                    <div class="text-right mt-4">
-                    
-                    </div>
-                </div>
 
-               
+                <!-- Resultados -->
+                <div>
+                    <table class="w-full table-auto text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border px-2 py-1">Carnet</th>
+                                <th class="border px-2 py-1">Nombre</th>
+                                <th class="border px-2 py-1">Prueba</th>
+                                <th class="border px-2 py-1">Nota</th>
+                                <th class="border px-2 py-1">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entregas-body">
+                            <tr>
+                                <td colspan="5" class="text-center py-4">Seleccione una sección</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
-</div>
 
+    <script>
+        // 1) Carga secciones usando tu ruta /seccionesListar
+        async function cargarSecciones() {
+            try {
+                const res = await fetch('http://localhost:4000/seccionesListar');
+                const secciones = await res.json();
+                const sel = document.getElementById('select-seccion');
+                sel.innerHTML = '<option value="">-- selecciona --</option>';
+                secciones.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = `${s.nombre} (${s.anio})`;
+                    sel.append(opt);
+                });
+            } catch (e) {
+                console.error(e);
+                alert('No se pudieron cargar las secciones');
+            }
+        }
 
-
-</script>
+        // 2) Carga entregas calificadas al cambiar la sección
+        async function cargarEntregas(seccionId) {
+            const tbody = document.getElementById('entregas-body');
+            if (!seccionId) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Seleccione una sección</td></tr>';
+                return;
+            }
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Cargando…</td></tr>';
+            try {
+                const res = await fetch(`http://localhost:4000/entregas/seccion/${seccionId}`, {
+                    credentials: 'include' // <-- Esto permite enviar la cookie de sesión
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Error servidor');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No hay entregas calificadas</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.map(e => `
+      <tr class="hover:bg-gray-50">
+        <td class="border px-2 py-1">${e.carnet}</td>
+        <td class="border px-2 py-1">${e.nombre}</td>
+        <td class="border px-2 py-1">${e.prueba}</td>
+        <td class="border px-2 py-1 text-center">${e.nota.toFixed(1)}</td>
+        <td class="border px-2 py-1 text-center">
+          <a href="Vista_Form_${e.prueba.replace(/\s+/g, '_')}_Doce.html?tarea=${e.tareaId}&alumno=${e.alumnoId}"
+             class="px-3 py-1 bg-blue-500 text-white rounded">Ver</a>
+        </td>
+      </tr>
+    `).join('');
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 py-4">Error de conexión</td></tr>`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarSecciones();
+            document.getElementById('select-seccion')
+                .addEventListener('change', e => cargarEntregas(e.target.value));
+        });
+    </script>
 </body>
-<script src="../frontend/assets/cerrarSesion.js"></script>
+
 </html>
