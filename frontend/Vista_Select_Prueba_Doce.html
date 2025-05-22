@@ -1,206 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="../frontend/assets/sesionDoce.js"></script>
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="../frontend/assets/sesionDoce.js"></script>
+  <title>Document</title>
 </head>
+
 <body>
-    <!-- component -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
+  <!-- component -->
+  <!DOCTYPE html>
+  <html lang="es">
+
+  <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Agregar estilos para la vista de dispositivos pequeños */
-        @media (max-width: 768px) {
-            .flex-wrap {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .section-small {
-                width: 50%;
-            }
+      /* Agregar estilos para la vista de dispositivos pequeños */
+      @media (max-width: 768px) {
+        .flex-wrap {
+          display: flex;
+          flex-wrap: wrap;
         }
-    </style>
-</head>
-<body>
-<div class="flex flex-col h-screen ">
 
-    <!-- Barra de navegación superior -->
-    <div class="bg-gray-100 text-white shadow w-full p-2 flex items-center justify-between">
+        .section-small {
+          width: 50%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="flex flex-col h-screen ">
+
+      <!-- Barra de navegación superior -->
+      <div class="bg-gray-100 text-white shadow w-full p-2 flex items-center justify-between">
         <div class="flex items-center">
-            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
-               <a href="./vista_index_Doce.html"><h2 class="font-bold text-xl text-gray-500">FactuEdu</h2></a>
-                
-            </div>
-            
+          <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
+            <a href="./vista_index_Doce.html">
+              <h2 class="font-bold text-xl text-gray-500">FactuEdu</h2>
+            </a>
+
+          </div>
+
         </div>
 
         <div class="space-x-5">
         </div>
-    </div>
+      </div>
 
-    <!-- Contenido principal -->
-    <div class="flex-1 flex">
+      <!-- Contenido principal -->
+      <div class="flex-1 flex">
         <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
         <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
-            <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Select_Prueba_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Asignar prueba
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificar_Doce.html">
-                    <i class="fas fa-file-alt mr-2"></i>Calificar
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Notas_Doce.html">
-                     <i class="fas fa-file-alt mr-2"></i>Ver notas 
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Crear_Grupo_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Crear grupo
-                </a>
-                <!-- Ítem de Cerrar Sesión -->
-            <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+          <nav>
+            <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+              href="../frontend/Vista_Select_Prueba_Doce.html">
+              <i class="fas fa-users mr-2"></i>Asignar prueba
             </a>
-            </nav>
+            <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+              href="../frontend/Vista_Calificar_Doce.html">
+              <i class="fas fa-file-alt mr-2"></i>Calificar
+            </a>
+            <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+              href="../frontend/Vista_Notas_Doce.html">
+              <i class="fas fa-file-alt mr-2"></i>Ver notas
+            </a>
+            <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+              href="../frontend/Vista_Crear_Grupo_Doce.html">
+              <i class="fas fa-users mr-2"></i>Crear grupo
+            </a>
+            <!-- Ítem de Cerrar Sesión -->
+            <a id="logoutBtn"
+              class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto"
+              href="#">
+              <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+            </a>
+          </nav>
 
 
 
-            <!-- Señalador de ubicación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+          <!-- Señalador de ubicación -->
+          <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
 
-            <!-- Copyright al final de la navegación lateral -->
-            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
+          <!-- Copyright al final de la navegación lateral -->
+          <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
 
         </div>
 
         <!-- Área de contenido principal -->
         <div class="flex-1 p-4">
-           
-              <!-- component -->
-<div class="transition-colors duration-300">
-    <div class="container mx-auto p-4">
-        <div class="bg-white  shadow rounded-lg p-6">
-            <h1 class="text-xl font-semibold mb-4 text-gray-900 ">FactuEdu</h1>
-            <!-- Option -->
-            
-            <form>
-                <p class="text-gray-600  mb-6">Seleccione la seccion correspondiente</p>
-                 <div class="mb-4">
+
+          <!-- component -->
+          <div class="transition-colors duration-300">
+            <div class="container mx-auto p-4">
+              <div class="bg-white  shadow rounded-lg p-6">
+                <h1 class="text-xl font-semibold mb-4 text-gray-900 ">FactuEdu</h1>
+                <!-- Option -->
+
+                <form id="formTarea">
+                  <p class="text-gray-600 mb-6">Seleccione la sección correspondiente</p>
+                  <div class="mb-4">
                     <select id="select-seccion" class="border p-2 rounded w-full">
+                      <option disabled selected>Seleccione una sección</option>
                     </select>
-                </div>
-                <p class="text-gray-600  mb-6">Seleccione la prueba correspondiente</p> 
-                 <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                      <option>Credito fiscal</option>
-                      <option>Factura cliente final</option>
-                      <option>Nota de credito</option>
+                  </div>
+
+                  <p class="text-gray-600 mb-6">Seleccione la prueba (tipo de tarea)</p>
+                  <div class="mb-4">
+                    <select id="select-tipo" class="border p-2 rounded w-full">
+                      <option value="" disabled selected>Seleccione un tipo</option>
+                      <option value="1">Crédito fiscal</option>
+                      <option value="2">Factura cliente final</option>
+                      <option value="3">Nota de crédito</option>
                     </select>
-                </div>
-                <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
-                    Guardar 
-                </button>
-            </form>
-        </div>
-    </div>
-  </div>
-        
-            <!-- Contenedor) -->
-            
+                  </div>
+
+                  <button type="submit" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">
+                    Guardar
+                  </button>
+                </form>
+
+              </div>
             </div>
+          </div>
+
+          <!-- Contenedor) -->
+
         </div>
+      </div>
     </div>
-</div>
-
-  <!-- icono -->
-
-
-  <!-- botón de cierre (intacto) -->
-  <div
-    data-dismissible-target="alert"
-    data-ripple-dark="true"
-    class="absolute top-3 right-3 w-max rounded-lg transition-all hover:bg-white hover:bg-opacity-20"
-  >
-    <div role="button" class="w-max rounded-lg p-1">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12" />
-      </svg>
     </div>
-  </div>
-</div>
 
-  <!-- Alert -->
-<div
-  class=" hidden top-4 left-1/2 -translate-x-1/2 z-50 font-regular w-full max-w-screen-md rounded-lg bg-green-400 bg-opacity-50 px-4 py-4 text-base text-white"
-  data-dismissible="alert "
->
-  <!-- icono -->
-  <div class="absolute top-4 left-4">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="currentColor" aria-hidden="true" class="mt-px h-6 w-6">
-      <path fill-rule="evenodd"
+    <!-- icono -->
+
+
+    <!-- botón de cierre (intacto) -->
+    <div data-dismissible-target="alert" data-ripple-dark="true"
+      class="absolute top-3 right-3 w-max rounded-lg transition-all hover:bg-white hover:bg-opacity-20">
+      <div role="button" class="w-max rounded-lg p-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+    </div>
+    </div>
+
+    <!-- Alert -->
+    <div
+      class=" hidden top-4 left-1/2 -translate-x-1/2 z-50 font-regular w-full max-w-screen-md rounded-lg bg-green-400 bg-opacity-50 px-4 py-4 text-base text-white"
+      data-dismissible="alert ">
+      <!-- icono -->
+      <div class="absolute top-4 left-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+          class="mt-px h-6 w-6">
+          <path fill-rule="evenodd"
             d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
             clip-rule="evenodd" />
-    </svg>
-  </div>
+        </svg>
+      </div>
 
-  <!-- texto -->
-  <div class="ml-8 mr-12">
-    <h5 class="text-xl font-semibold">Guardado</h5>
-    <p class="mt-2">Los datos se asignaron con éxito.</p>
-  </div>
+      <!-- texto -->
+      <div class="ml-8 mr-12">
+        <h5 class="text-xl font-semibold">Guardado</h5>
+        <p class="mt-2">Los datos se asignaron con éxito.</p>
+      </div>
 
-  <!-- botón de cierre (intacto) -->
-  <div
-    data-dismissible-target="alert"
-    data-ripple-dark="true"
-    class="absolute top-3 right-3 w-max rounded-lg transition-all hover:bg-white hover:bg-opacity-20"
-  >
-    <div role="button" class="w-max rounded-lg p-1">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12" />
-      </svg>
+      <!-- botón de cierre (intacto) -->
+      <div data-dismissible-target="alert" data-ripple-dark="true"
+        class="absolute top-3 right-3 w-max rounded-lg transition-all hover:bg-white hover:bg-opacity-20">
+        <div role="button" class="w-max rounded-lg p-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
 
 
 
 
-</body>
-</html>
+  </body>
+
+  </html>
 </body>
 <script src="../frontend/assets/cerrarSesion.js"></script>
 <script>
-async function cargarSecciones() {
-  try {
-    const res = await fetch('http://localhost:4000/seccionesListar', {
-      credentials: 'include'
-    });
-    const secciones = await res.json();
-    const select = document.getElementById('select-seccion');
-    console.log(secciones);
+  async function cargarSecciones() {
+    try {
+      const res = await fetch('http://localhost:4000/seccionesListar', {
+        credentials: 'include'
+      });
+      const secciones = await res.json();
+      const select = document.getElementById('select-seccion');
+      console.log(secciones);
 
-    secciones.forEach(s => {
-      const option = document.createElement('option');
-      option.value = s.id;
-      option.textContent = s.nombre + " " + s.anio;
-      select.appendChild(option);
-    });
-  } catch (err) {
-    console.error('Error al cargar secciones:', err);
+      secciones.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = s.nombre + " " + s.anio;
+        select.appendChild(option);
+      });
+    } catch (err) {
+      console.error('Error al cargar secciones:', err);
+    }
   }
-}
 
-document.addEventListener('DOMContentLoaded', cargarSecciones);
+  document.addEventListener('DOMContentLoaded', cargarSecciones);
+  async function cargarSecciones() {
+    try {
+      const res = await fetch('http://localhost:4000/seccionesListar', { credentials: 'include' });
+      const secciones = await res.json();
+      const select = document.getElementById('select-seccion');
+      secciones.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = `${s.nombre} (${s.anio})`;
+        select.appendChild(opt);
+      });
+    } catch (err) {
+      console.error('Error al cargar secciones:', err);
+    }
+  }
+
+  document.getElementById('formTarea').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id_seccion = parseInt(document.getElementById('select-seccion').value, 10);
+    const tipo_tarea = parseInt(document.getElementById('select-tipo').value, 10);
+
+    if (!id_seccion) {
+      return alert('Por favor, selecciona una sección.');
+    }
+    if (![1, 2, 3].includes(tipo_tarea)) {
+      return alert('Por favor, selecciona un tipo de tarea válido.');
+    }
+
+    try {
+      const res = await fetch('http://localhost:4000/tareas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id_seccion, tipo_tarea })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        return alert(data.error || 'Error al crear la tarea.');
+      }
+
+      alert('Tarea creada con éxito.');
+      document.getElementById('formTarea').reset();
+    } catch (err) {
+      console.error('Error al crear tarea:', err);
+      alert('No se pudo conectar al servidor.');
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', cargarSecciones);
 </script>
+
 </html>

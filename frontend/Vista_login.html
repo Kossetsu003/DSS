@@ -90,6 +90,7 @@
       if (response.ok) {
         alert('Login exitoso');
         localStorage.setItem('rol', result.rol);
+        localStorage.setItem('id', result.id);
         if (result.rol == 2) {
           window.location.href = '/DSS/frontend/Vista_index_Doce.html';
         } else {

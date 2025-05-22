@@ -210,3 +210,32 @@ app.delete('/secciones/:id/integrantes/:alumnoId', async (req, res) => {
     res.status(500).json({ message: 'Error del servidor' });
   }
 });
+
+app.post('/tareas', requireLogin, async (req, res) => {
+  const { id_seccion, tipo_tarea } = req.body;
+  const id_maestro = req.session.user.id;
+
+  if (!id_seccion || isNaN(id_seccion)) {
+    return res.status(400).json({ error: 'Debe seleccionar una sección válida.' });
+  }
+  if (![1,2,3].includes(Number(tipo_tarea))) {
+    return res.status(400).json({ error: 'Tipo de tarea inválido.' });
+  }
+
+  try {
+    const pool = await poolPromise;
+    await pool.request()
+      .input('idSeccion', sql.Int, id_seccion)
+      .input('idMaestro', sql.Int, id_maestro)
+      .input('tipo',     sql.TinyInt, tipo_tarea)
+      .query(`
+        INSERT INTO tareas (id_seccion, id_maestro, tipo_tarea)
+        VALUES (@idSeccion, @idMaestro, @tipo)
+      `);
+
+    res.status(201).json({ message: 'Tarea creada correctamente.' });
+  } catch (err) {
+    console.error('Error al crear tarea:', err);
+    res.status(500).json({ error: 'Error en el servidor.' });
+  }
+});
