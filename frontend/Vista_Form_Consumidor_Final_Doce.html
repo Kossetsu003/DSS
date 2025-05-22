@@ -1,250 +1,246 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
   <script src="../frontend/assets/sesionDoce.js" defer></script>
   <script src="../frontend/assets/cerrarSesion.js" defer></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
-  <title>Ver Factura Consumidor Final</title>
-  <style>
-    @media (max-width: 768px) { .flex-wrap{display:flex;flex-wrap:wrap;} .section-small{width:50%;} }
-  </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <title>Ingresar Factura Consumidor Final</title>
 </head>
+
 <body class="flex flex-col h-screen bg-gray-100">
+  <div class="flex-1 flex">
+    <div class="flex-1 flex">
+    <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
+    <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
+      <nav>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+          href="../frontend/Vista_Select_Prueba_Doce.html">
+          <i class="fas fa-users mr-2"></i>Asignar prueba
+        </a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+          href="../frontend/Vista_Calificar_Doce.html">
+          <i class="fas fa-file-alt mr-2"></i>Calificar
+        </a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+          href="../frontend/Vista_Notas_Doce.html">
+          <i class="fas fa-file-alt mr-2"></i>Ver notas
+        </a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white"
+          href="../frontend/Vista_Crear_Grupo_Doce.html">
+          <i class="fas fa-users mr-2"></i>Crear grupo
+        </a>
+        <!-- Ítem de Cerrar Sesión -->
+        <a id="logoutBtn"
+          class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto"
+          href="#">
+          <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+        </a>
+      </nav>
 
- <div class="flex-1 flex">
-        <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
-        <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
-            <nav>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Select_Prueba_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Asignar prueba
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Calificar_Doce.html">
-                    <i class="fas fa-file-alt mr-2"></i>Calificar
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Notas_Doce.html">
-                     <i class="fas fa-file-alt mr-2"></i>Ver notas 
-                </a>
-                <a class="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="../frontend/Vista_Crear_Grupo_Doce.html">
-                    <i class="fas fa-users mr-2"></i>Crear grupo
-                </a>
-                <!-- Ítem de Cerrar Sesión -->
-            <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
-                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
-            </a>
-            </nav>
 
 
 
+      <!-- Señalador de ubicación -->
+      <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
 
-            <!-- Señalador de ubicación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+      <!-- Copyright al final de la navegación lateral -->
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
 
-            <!-- Copyright al final de la navegación lateral -->
-            <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY </p>
+    </div>
 
+    <!-- Formulario -->
+    <main class="flex-1 p-4 overflow-auto">
+      <form id="facturaForm" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
+        <h2 class="text-2xl font-semibold text-center mb-6">Formulario - Factura Consumidor Final</h2>
+
+        <!-- Fecha -->
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+          <label class="flex flex-col">Día<input id="dia" type="number" min="1" max="31" required class="rounded border px-2 py-1" /></label>
+          <label class="flex flex-col">Mes<input id="mes" type="number" min="1" max="12" required class="rounded border px-2 py-1" /></label>
+          <label class="flex flex-col">Año<input id="anio" type="number" min="1900" max="2100" required class="rounded border px-2 py-1" /></label>
         </div>
 
+        <!-- Cliente -->
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <label class="flex flex-col">Nombre Cliente<input id="cliente_nombre" required class="rounded border px-2 py-1" /></label>
+          <label class="flex flex-col">DUI o NIT<input id="dui_o_nit" class="rounded border px-2 py-1" /></label>
+        </div>
+        <label class="flex flex-col mb-4">Dirección<input id="direccion" class="rounded border px-2 py-1" /></label>
+        <label class="flex flex-col mb-4">Venta a cuenta de<input id="venta_cuenta_de" class="rounded border px-2 py-1" /></label>
 
-  <div class="flex-1 p-4 overflow-auto">
-    <form id="viewFactura" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
-      <!-- 1. Encabezado -->
-      <header class="grid gap-4 md:grid-cols-3 border-b pb-4">
-        <div class="col-span-2 flex items-center space-x-4">
-          <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 object-contain"/>
-          <div>
-            <h1 class="text-2xl font-semibold">Factu Edu</h1>
-            <p class="text-xs">Dirección… Giro…</p>
+        <!-- Totales -->
+        <div class="grid md:grid-cols-2 gap-4 text-sm mb-6">
+          <label class="flex flex-col">Son (en texto)<input id="son_texto" class="rounded border px-2 py-1" /></label>
+          <div class="border rounded p-3 space-y-2">
+            <label class="flex justify-between">Sumas<input id="sumas" type="number" step="0.01" class="w-24 text-right rounded border px-2 py-1" /></label>
+            <label class="flex justify-between">Venta Exenta<input id="venta_exenta" type="number" step="0.01" class="w-24 text-right rounded border px-2 py-1" /></label>
+            <label class="flex justify-between">Venta No Sujeta<input id="venta_no_sujeta" type="number" step="0.01" class="w-24 text-right rounded border px-2 py-1" /></label>
+            <label class="flex justify-between">IVA Retenido<input id="iva_retenido" type="number" step="0.01" class="w-24 text-right rounded border px-2 py-1" /></label>
+            <label class="flex justify-between font-semibold">Venta Total<input id="venta_total" type="number" step="0.01" class="w-24 text-right rounded border px-2 py-1" /></label>
           </div>
         </div>
-        <div class="flex flex-col items-center border rounded bg-gray-50 p-3">
-          <p class="font-semibold">FACTURA</p>
-          <p class="text-4xl font-bold text-red-600">No. 0001</p>
-          <p class="text-xs">N.R.C.… NIT.…</p>
+
+        <!-- Tabla de Detalles -->
+        <section class="mb-6">
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border-collapse">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="border px-1 py-1">CANT.</th>
+                  <th class="border px-1 py-1">DESCRIPCIÓN</th>
+                  <th class="border px-1 py-1">P. UNITARIO</th>
+                  <th class="border px-1 py-1">VENTA NO SUJ.</th>
+                  <th class="border px-1 py-1">VENTA EXENTAS</th>
+                  <th class="border px-1 py-1">VENTA GRAVADAS</th>
+                </tr>
+              </thead>
+              <tbody id="detalle-body">
+                <!-- Aquí se insertarán los <tr> -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Firmas -->
+        <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+          <div class="border rounded p-3">
+            <p class="font-medium mb-2">Entregado por</p>
+            <input id="entregado_nombre" class="w-full mb-2 rounded border px-2 py-1" placeholder="Nombre" />
+            <input id="entregado_dui" class="w-full mb-2 rounded border px-2 py-1" placeholder="DUI" />
+            <input id="entregado_firma" class="w-full mb-2 rounded border px-2 py-1" placeholder="Firma" />
+          </div>
+          <div class="border rounded p-3">
+            <p class="font-medium mb-2">Recibido por</p>
+            <input id="recibido_nombre" class="w-full mb-2 rounded border px-2 py-1" placeholder="Nombre" />
+            <input id="recibido_dui" class="w-full mb-2 rounded border px-2 py-1" placeholder="DUI" />
+            <input id="recibido_firma" class="w-full mb-2 rounded border px-2 py-1" placeholder="Firma" />
+          </div>
+        </section>
+
+        <!-- Botón y Nota -->
+        <div class="mt-6 flex justify-end items-center">
+          <div id="nota-container" class="flex items-center gap-2 mr-4"></div>
+          <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Guardar</button>
         </div>
-      </header>
-
-      <!-- 2. Fecha -->
-      <section class="mt-4 grid grid-cols-3 gap-2 text-sm">
-        <label class="flex flex-col">
-          Día
-          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-        <label class="flex flex-col">
-          Mes
-          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-        <label class="flex flex-col">
-          Año
-          <input type="number" readonly class="mt-1 rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-      </section>
-
-      <!-- 3. Datos cliente -->
-      <section class="mt-4 space-y-2 text-sm">
-        <div class="grid gap-4 md:grid-cols-2">
-          <label class="flex flex-col">
-            Nombre
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-          <label class="flex flex-col">
-            D.U.I. / N.I.T.
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-        </div>
-        <label class="flex flex-col">
-          Dirección
-          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-        <label class="flex flex-col">
-          Venta a cuenta de
-          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-      </section>
-
-      <!-- 4. Detalle -->
-      <section class="mt-6">
-        <div class="overflow-x-auto">
-          <table class="w-full text-xs border-collapse">
-            <thead>
-              <tr class="bg-gray-200">
-                <th class="border px-1 py-1">CANT.</th>
-                <th class="border px-1 py-1">DESCRIPCIÓN</th>
-                <th class="border px-1 py-1">P. UNITARIO</th>
-                <th class="border px-1 py-1">VENTA NO SUJ.</th>
-                <th class="border px-1 py-1">VENTA EXENTAS</th>
-                <th class="border px-1 py-1">VENTA GRAVADAS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Se rellenará con JS -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 5. Calificación -->
-      <div class="mt-6 flex items-center justify-between">
-        <label class="flex items-center gap-2">
-          Calificar:
-          <input id="nota" type="number" min="0" max="100" class="ml-2 w-20 rounded border px-2 py-1"/>
-        </label>
-        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Guardar calificación
-        </button>
-      </div>
-    </form>
+      </form>
+    </main>
   </div>
-</body>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const tarea = params.get('tarea');
-  const alumno = params.get('alumno');
-  
-  if (!tarea || !alumno) {
-    alert('Faltan parámetros tarea o alumno en la URL');
-    return;
-  }
-
-  const form = document.getElementById('viewFactura');
-  if (!form) {
-    alert('No se encontró el formulario');
-    return;
-  }
-
-  // Inputs readonly en orden:
-  // Día, Mes, Año, Nombre, DUI/NIT, Dirección, Venta a cuenta de
-  const cabeceraInputs = form.querySelectorAll('input[readonly]');
-  if (cabeceraInputs.length < 7) {
-    alert('No se encontraron todos los inputs readonly esperados');
-    return;
-  }
-
-  // tbody para detalles
-  const tbody = form.querySelector('tbody');
-  if (!tbody) {
-    alert('No se encontró el tbody para detalles');
-    return;
-  }
-
-  // Input para nota y botón guardar
-  const notaInput = form.querySelector('#nota');
-  const btnGuardar = form.querySelector('button[type="button"]');
-  if (!notaInput || !btnGuardar) {
-    alert('No se encontró el input nota o el botón para guardar');
-    return;
-  }
-
-  // Traer datos del backend
-  fetch(`http://localhost:4000/formulario/factura-consumidor-final?tarea=${tarea}&alumno=${alumno}`, {
-    credentials: 'include'
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Error al obtener datos de la factura');
-    return res.json();
-  })
-  .then(data => {
-    const c = data.cabecera;
-    const detalles = data.detalles;
-
-    // Asignar valores a inputs readonly (usar || '' para evitar undefined)
-    cabeceraInputs[0].value = c.Dia || '';
-    cabeceraInputs[1].value = c.Mes || '';
-    cabeceraInputs[2].value = c.Anio || '';
-    cabeceraInputs[3].value = c.NombreCliente || '';
-    cabeceraInputs[4].value = c.DUI_o_NIT || '';
-    cabeceraInputs[5].value = c.Direccion || '';
-    cabeceraInputs[6].value = c.VentaCuentaDe || '';
-
-    // Renderizar detalles en tabla
-    tbody.innerHTML = detalles.map(d => `
-      <tr>
-        <td class="border px-1 py-1 text-center">${d.Cantidad}</td>
-        <td class="border px-1 py-1">${d.Descripcion}</td>
-        <td class="border px-1 py-1 text-right">${parseFloat(d.PrecioUnitario).toFixed(2)}</td>
-        <td class="border px-1 py-1 text-right">${parseFloat(d.VentaNoSujeta).toFixed(2)}</td>
-        <td class="border px-1 py-1 text-right">${parseFloat(d.VentaExenta).toFixed(2)}</td>
-        <td class="border px-1 py-1 text-right">${parseFloat(d.VentaGravada).toFixed(2)}</td>
-      </tr>
-    `).join('');
-
-    // Si la nota existe, cargarla
-    if (c.nota !== null && c.nota !== undefined) {
-      notaInput.value = c.nota;
-    }
-  })
-  .catch(err => {
-    alert(err.message);
-  });
-
-  // Guardar calificación
-  btnGuardar.addEventListener('click', () => {
-    const valor = parseFloat(notaInput.value);
-    if (isNaN(valor) || valor < 0 || valor > 10) {
-      alert('La nota debe ser un número entre 0 y 10');
-      return;
-    }
-
-    fetch(`http://localhost:4000/calificar/factura-consumidor-final?tarea=${tarea}&alumno=${alumno}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ nota: valor })
-    })
-    .then(res => {
-      if (!res.ok) {
-        return res.json().then(j => Promise.reject(j.error || 'Error al guardar nota'));
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const tarea = params.get('tarea');
+      const alumno = params.get('alumno');
+      if (!tarea || !alumno) {
+        return alert('Faltan parámetros tarea o alumno en la URL');
       }
-      return res.json();
-    })
-    .then(() => alert('Nota guardada correctamente'))
-    .catch(err => alert(err));
-  });
-});
 
-</script>
+      // Mapeo de IDs a propiedades JSON
+      const campoMap = {
+        dia: 'Dia',
+        mes: 'Mes',
+        anio: 'Anio',
+        cliente_nombre: 'NombreCliente',
+        dui_o_nit: 'DUI_o_NIT',
+        direccion: 'Direccion',
+        venta_cuenta_de: 'VentaCuentaDe',
+        son_texto: 'SonTexto',
+        sumas: 'Sumas',
+        venta_exenta: 'VentaExenta',
+        venta_no_sujeta: 'VentaNoSujeta',
+        iva_retenido: 'IvaRetenido',
+        venta_total: 'VentaTotal',
+        entregado_nombre: 'Entregado_Nombre',
+        entregado_dui: 'Entregado_DUI',
+        entregado_firma: 'Entregado_Firma',
+        recibido_nombre: 'Recibido_Nombre',
+        recibido_dui: 'Recibido_DUI',
+        recibido_firma: 'Recibido_Firma'
+      };
+
+      // Referencias
+      const campos = {};
+      Object.keys(campoMap).forEach(id => {
+        campos[id] = document.getElementById(id);
+      });
+      const form = document.getElementById('facturaForm');
+      const notaContainer = document.getElementById('nota-container');
+
+      // Insertar nota
+      notaContainer.innerHTML = `
+        <label class="flex items-center gap-1">
+          Nota:
+          <input id="nota_input" type="number" min="0" max="10" step="0.1" class="w-16 rounded border px-2 py-1" />
+        </label>
+      `;
+      const notaInput = document.getElementById('nota_input');
+
+      // Fetch cabecera+detalles
+      fetch(`http://localhost:4000/formulario/factura-final?tarea=${tarea}&alumno=${alumno}`, {
+        credentials: 'include'
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('No se encontró la factura');
+          return res.json();
+        })
+        .then(data => {
+          const f = data.factura;
+
+          // Rellenar cabecera
+          Object.entries(campoMap).forEach(([id, prop]) => {
+            const el = campos[id];
+            if (f[prop] != null) el.value = f[prop];
+            el.setAttribute('readonly', '');
+            el.classList.add('bg-gray-100');
+          });
+
+          // Rellenar nota
+          if (f.nota != null) notaInput.value = f.nota;
+
+          // Rellenar detalles
+          const tbody = document.getElementById('detalle-body');
+          if (Array.isArray(data.detalles)) {
+            tbody.innerHTML = data.detalles.map(d => `
+              <tr>
+                <td class="border px-1 py-1 text-center">${d.Cantidad}</td>
+                <td class="border px-1 py-1">${d.Descripcion}</td>
+                <td class="border px-1 py-1 text-right">${parseFloat(d.PrecioUnitario).toFixed(2)}</td>
+                <td class="border px-1 py-1 text-right">${parseFloat(d.VentaNoSujeta).toFixed(2)}</td>
+                <td class="border px-1 py-1 text-right">${parseFloat(d.VentaExenta).toFixed(2)}</td>
+                <td class="border px-1 py-1 text-right">${parseFloat(d.VentaGravada).toFixed(2)}</td>
+              </tr>
+            `).join('');
+          } else {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Sin detalles</td></tr>';
+          }
+        })
+        .catch(err => alert(err.message));
+
+      // Enviar nota
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const v = parseFloat(notaInput.value);
+        if (isNaN(v) || v < 0 || v > 10) {
+          return alert('La nota debe ser un número entre 0 y 10');
+        }
+        fetch('http://localhost:4000/formulario/factura-final/nota', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ tarea, alumno, nota: v })
+        })
+          .then(r => {
+            if (!r.ok) return r.json().then(j => Promise.reject(j.error || 'Error al guardar nota'));
+            return r.json();
+          })
+          .then(() => alert('Nota guardada correctamente'))
+          .catch(err => alert(err));
+      });
+    });
+  </script>
+</body>
 </html>

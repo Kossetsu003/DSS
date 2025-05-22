@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
   <script src="../frontend/assets/sesion.js" defer></script>
   <script src="../frontend/assets/cerrarSesion.js" defer></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <title>Factura Consumidor Final</title>
   <style>
     @media (max-width: 768px) {
-      .flex-wrap { display: flex; flex-wrap: wrap; }
-      .section-small { width: 50%; }
+      .flex-wrap {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .section-small {
+        width: 50%;
+      }
     }
   </style>
 </head>
+
 <body class="flex flex-col h-screen bg-gray-100">
 
   <!-- Barra superior -->
@@ -34,13 +42,16 @@
     <!-- Sidebar -->
     <div id="sideNav" class="p-2 bg-white w-60 flex flex-col hidden md:flex">
       <nav>
-        <a href="Vista_Prueba_Asig_Alu.html" class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+        <a href="Vista_Prueba_Asig_Alu.html"
+          class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
           <i class="fas fa-users mr-2"></i>Pruebas asignadas
         </a>
-        <a href="Vista_Calificacion_Alu.html" class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
+        <a href="Vista_Calificacion_Alu.html"
+          class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white">
           <i class="fas fa-file-alt mr-2"></i>Calificación
         </a>
-        <a id="logoutBtn" href="#" class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto">
+        <a id="logoutBtn" href="#"
+          class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto">
           <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
         </a>
       </nav>
@@ -62,27 +73,30 @@
               <p class="text-xs">
                 Dirección: 9° Calle Ote. 2° Av. Norte, Barrio Dolores #46, Izalco, Sonsonate<br>
                 Giro: Alojamiento N.C.P.<br>
-                Teléfono: 7096-9464    correo: UDB@gmail.com
+                Teléfono: 7096-9464 correo: UDB@gmail.com
               </p>
             </div>
           </div>
           <div class="flex flex-col items-center border rounded-lg p-3 bg-gray-50">
             <p class="font-semibold">FACTURA</p>
             <p class="text-4xl font-bold text-red-600">No. 0001</p>
-            <p class="text-xs text-center">N.R.C.: 294712-1  NIT: 0306-071266-101-5</p>
+            <p class="text-xs text-center">N.R.C.: 294712-1 NIT: 0306-071266-101-5</p>
           </div>
         </header>
 
         <!-- 2. Fecha -->
         <section class="mt-4 grid grid-cols-3 gap-2 text-sm">
           <label class="flex flex-col">Día
-            <input id="dia" type="number" min="1" max="31" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <input id="dia" type="number" min="1" max="31"
+              class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
           </label>
           <label class="flex flex-col">Mes
-            <input id="mes" type="number" min="1" max="12" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <input id="mes" type="number" min="1" max="12"
+              class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
           </label>
           <label class="flex flex-col">Año
-            <input id="anio" type="number" min="2000" max="2100" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <input id="anio" type="number" min="2000" max="2100"
+              class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
           </label>
         </section>
 
@@ -90,17 +104,21 @@
         <section class="mt-4 space-y-2 text-sm">
           <div class="grid gap-4 md:grid-cols-2">
             <label class="flex flex-col">Nombre
-              <input id="clienteNombre" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="clienteNombre"
+                class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </label>
             <label class="flex flex-col">D.U.I. o N.I.T.
-              <input id="clienteNit" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="clienteNit"
+                class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </label>
           </div>
           <label class="flex flex-col">Dirección
-            <input id="clienteDireccion" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <input id="clienteDireccion"
+              class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
           </label>
           <label class="flex flex-col">Venta a cuenta de
-            <input id="ventaCta" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <input id="ventaCta"
+              class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
           </label>
         </section>
 
@@ -120,12 +138,24 @@
               </thead>
               <tbody id="rows">
                 <tr>
-                  <td><input type="number" min="0" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-                  <td><input class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
-                  <td><input type="number" min="0" step="any" class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></td>
+                  <td><input type="number" min="0"
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-center text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
+                  <td><input
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
+                  <td><input type="number" min="0" step="any"
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
+                  <td><input type="number" min="0" step="any"
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
+                  <td><input type="number" min="0" step="any"
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
+                  <td><input type="number" min="0" step="any"
+                      class="w-full rounded border border-gray-400 bg-white px-1 py-0.5 text-right text-xs focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -139,16 +169,22 @@
         <section class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
           <div>
             <label class="flex flex-col">SON:
-              <input id="sonTexto" class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="sonTexto"
+                class="mt-1 rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </label>
             <label class="flex items-center mt-2 text-xs italic">C/C: llenar si ≥ $200.00</label>
           </div>
           <div class="border rounded p-3 space-y-1">
-            <div class="flex justify-between"><span>SUMAS</span><input id="sumas"  class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
-            <div class="flex justify-between"><span>VENTA EXENTA</span><input id="ventaExenta"  class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
-            <div class="flex justify-between"><span>VENTA NO SUJETA</span><input id="ventaNoSujeta"  class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
-            <div class="flex justify-between"><span>(-) IVA RETENIDO</span><input id="ivaRetenido"  class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
-            <div class="flex justify-between font-bold"><span>VENTA TOTAL</span><input id="ventaTotal"  class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
+            <div class="flex justify-between"><span>SUMAS</span><input id="sumas"
+                class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
+            <div class="flex justify-between"><span>VENTA EXENTA</span><input id="ventaExenta"
+                class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
+            <div class="flex justify-between"><span>VENTA NO SUJETA</span><input id="ventaNoSujeta"
+                class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
+            <div class="flex justify-between"><span>(-) IVA RETENIDO</span><input id="ivaRetenido"
+                class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
+            <div class="flex justify-between font-bold"><span>VENTA TOTAL</span><input id="ventaTotal"
+                class="w-20 rounded border border-gray-400 bg-gray-50 px-2 py-0.5 text-right text-xs"></div>
           </div>
         </section>
 
@@ -157,22 +193,28 @@
           <div class="grid md:grid-cols-2 gap-4">
             <div class="border rounded p-3 space-y-2 text-center">
               <p class="font-medium border-b pb-1">ENTREGADO POR:</p>
-              <input id="entregadoNombre" placeholder="Nombre" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-              <input id="entregadoDUI" placeholder="DUI" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-              <input id="entregadoFirma" placeholder="Firma" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="entregadoNombre" placeholder="Nombre"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="entregadoDUI" placeholder="DUI"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="entregadoFirma" placeholder="Firma"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </div>
             <div class="border rounded p-3 space-y-2 text-center">
               <p class="font-medium border-b pb-1">RECIBIDO POR:</p>
-              <input id="recibidoNombre" placeholder="Nombre" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-              <input id="recibidoDUI" placeholder="DUI" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
-              <input id="recibidoFirma" placeholder="Firma" class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="recibidoNombre" placeholder="Nombre"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="recibidoDUI" placeholder="DUI"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+              <input id="recibidoFirma" placeholder="Firma"
+                class="mt-1 w-full rounded border border-gray-400 bg-white px-2 py-1 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
             </div>
           </div>
         </section>
 
         <!-- 7. Footer y Botón -->
         <footer class="mt-4 text-[10px] text-center text-gray-600">
-          <p>Original – Emisor   Duplicado – Cliente</p>
+          <p>Original – Emisor Duplicado – Cliente</p>
         </footer>
         <div class="mt-6 flex justify-end gap-3">
           <button type="submit" class="rounded bg-green-600 px-6 py-2 text-white hover:bg-green-700">Guardar</button>
@@ -190,82 +232,78 @@
       document.getElementById('rows').appendChild(tr);
     };
 
-    // Envío
     document.getElementById('facturaFinalForm').addEventListener('submit', async e => {
       e.preventDefault();
-      const tareaId   = new URLSearchParams(location.search).get('tarea');
-      const id_alumno = localStorage.getItem('id');
-      if (!tareaId || !id_alumno) {
-        return alert('Falta tarea o sesión expirada.');
+
+      const tareaId = new URLSearchParams(location.search).get('tarea');
+      const id_alumno = parseInt(localStorage.getItem('id'), 10);
+      if (!tareaId || !id_alumno) return alert('Faltan datos de tarea o alumno');
+
+      const getVal = id => document.getElementById(id).value.trim();
+      const numVal = id => parseFloat(document.getElementById(id).value) || 0;
+
+      // Armar la lista de detalles leyendo cada <tr> bajo #rows
+      const detalles = Array.from(document
+        .querySelectorAll('#rows tr'))
+        .map(tr => {
+          const inputs = tr.querySelectorAll('input');
+          return {
+            cantidad: parseInt(inputs[0].value, 10) || 0,
+            descripcion: inputs[1].value.trim() || '',
+            precio_unitario: parseFloat(inputs[2].value) || 0,
+            venta_no_sujeta: parseFloat(inputs[3].value) || 0,
+            venta_exenta: parseFloat(inputs[4].value) || 0,
+            venta_gravada: parseFloat(inputs[5].value) || 0
+          };
+        })
+        .filter(d => d.cantidad > 0 || d.descripcion); // opcional: quita filas vacías
+
+      if (detalles.length === 0) {
+        return alert('Debes agregar al menos un detalle con cantidad o descripción');
       }
 
-      // Cabecera
       const body = {
-        id_alumno:       parseInt(id_alumno,10),
-        dia:             parseInt(document.getElementById('dia').value,10),
-        mes:             parseInt(document.getElementById('mes').value,10),
-        anio:            parseInt(document.getElementById('anio').value,10),
-        cliente_nombre:  document.getElementById('clienteNombre').value.trim(),
-        cliente_nit:     document.getElementById('clienteNit').value.trim(),
-        cliente_direccion: document.getElementById('clienteDireccion').value.trim(),
-        venta_cta_de:    document.getElementById('ventaCta').value.trim(),
-        son_texto:       document.getElementById('sonTexto').value.trim(),
-        detalles:        []
+        id_alumno: id_alumno,
+        dia: parseInt(getVal('dia'), 10),
+        mes: parseInt(getVal('mes'), 10),
+        anio: parseInt(getVal('anio'), 10),
+        cliente_nombre: getVal('clienteNombre'),
+        cliente_nit: getVal('clienteNit'),
+        cliente_direccion: getVal('clienteDireccion'),
+        venta_cta_de: getVal('ventaCta'),
+        son_texto: getVal('sonTexto'),
+        sumas: numVal('sumas'),
+        venta_exenta: numVal('ventaExenta'),
+        venta_no_sujeta: numVal('ventaNoSujeta'),
+        iva_retenido: numVal('ivaRetenido'),
+        venta_total: numVal('ventaTotal'),
+        entregado_nombre: getVal('entregadoNombre'),
+        entregado_dui: getVal('entregadoDUI'),
+        entregado_firma: getVal('entregadoFirma'),
+        recibido_nombre: getVal('recibidoNombre'),
+        recibido_dui: getVal('recibidoDUI'),
+        recibido_firma: getVal('recibidoFirma'),
+
+        detalles           // <-- aquí va el array de objetos
       };
 
-      // Totales
-      body.sumas         = parseFloat(document.getElementById('sumas').value) || 0;
-      body.ventaExenta   = parseFloat(document.getElementById('ventaExenta').value) || 0;
-      body.ventaNoSujeta = parseFloat(document.getElementById('ventaNoSujeta').value) || 0;
-      body.ivaRetenido   = parseFloat(document.getElementById('ivaRetenido').value) || 0;
-      body.ventaTotal    = parseFloat(document.getElementById('ventaTotal').value) || 0;
-
-
-      // Validar cabecera
-      for (let [k,v] of [
-        ['dia',          body.dia],
-        ['mes',          body.mes],
-        ['anio',         body.anio],
-        ['cliente_nombre', body.cliente_nombre]
-      ]) {
-        if (!v && v !== 0) return alert(`${k} es obligatorio.`);
-      }
-
-      // Detalles
-      document.querySelectorAll('#rows tr').forEach((tr,i) => {
-        const [inpCant, inpDesc, inpPU, inpNo, inpEx, inpGr] = tr.querySelectorAll('input');
-        const d = {
-          cantidad:        parseInt(inpCant.value,10),
-          descripcion:     inpDesc.value.trim(),
-          precio_unitario: parseFloat(inpPU.value),
-          venta_no_sujeta: parseFloat(inpNo.value),
-          venta_exenta:    parseFloat(inpEx.value),
-          venta_gravada:   parseFloat(inpGr.value)
-        };
-        if (!d.descripcion) return alert(`Falta descripción en línea ${i+1}`);
-        if (d.cantidad<0||d.precio_unitario<0||d.venta_no_sujeta<0||d.venta_exenta<0||d.venta_gravada<0)
-          return alert(`Valores inválidos en línea ${i+1}`);
-        body.detalles.push(d);
-      });
-      if (!body.detalles.length) return alert('Agrega al menos un detalle.');
-
-      // POST
       try {
         const res = await fetch(`http://localhost:4000/factura-final/${tareaId}`, {
           method: 'POST',
-          headers:{'Content-Type':'application/json'},
-          credentials:'include',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify(body)
         });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error||'Error servidor');
-        alert('Factura guardada exitosamente');
-        location.href = 'Vista_Prueba_Asig_Alu.html';
-      } catch(err) {
-        console.error(err);
-        alert(err.message);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al guardar');
+        alert('Factura guardada correctamente');
+        window.location.href = 'Vista_Prueba_Asig_Alu.html';
+      } catch (err) {
+        alert(err.message || 'Error de red');
       }
     });
+
   </script>
 </body>
+
 </html>

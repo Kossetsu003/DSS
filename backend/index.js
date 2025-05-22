@@ -551,36 +551,29 @@ app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
     dia, mes, anio,
     cliente_nombre, cliente_nit, cliente_direccion,
     venta_cta_de, son_texto,
+    sumas, venta_exenta, venta_no_sujeta, iva_retenido, venta_total,
+    entregado_nombre, entregado_dui, entregado_firma,
+    recibido_nombre, recibido_dui, recibido_firma,
     detalles
   } = req.body;
 
-  // 1) Validaciones básicas
-  if (!id_alumno) return res.status(400).json({ error: 'Falta id_alumno' });
-  for (let [k, v] of [
-    ['dia', dia], ['mes', mes], ['anio', anio],
-    ['cliente_nombre', cliente_nombre]
-  ]) {
-    if (v == null || v === '') return res.status(400).json({ error: `${k} es obligatorio` });
-  }
+  // Validaciones básicas
+  if (!id_alumno || !cliente_nombre || dia == null || mes == null || anio == null)
+    return res.status(400).json({ error: 'Datos incompletos' });
+
   if (!Array.isArray(detalles) || detalles.length === 0)
     return res.status(400).json({ error: 'Debes enviar al menos un detalle' });
-  detalles.forEach((d, i) => {
-    if (!d.descripcion || !d.descripcion.trim())
-      throw { status: 400, msg: `Falta descripción en detalle #${i + 1}` };
-    if (d.cantidad < 0 || d.precio_unitario < 0 ||
-      d.venta_no_sujeta < 0 || d.venta_exenta < 0 || d.venta_gravada < 0)
-      throw { status: 400, msg: `Valores inválidos en detalle #${i + 1}` };
-  });
 
   const pool = await poolPromise;
   const trx = new sql.Transaction(pool);
+
   try {
     await trx.begin();
 
-    // Inserta cabecera
-    const hdrReq = new sql.Request(trx)
-      .input('tarea', sql.Int, parseInt(tareaId, 10))
-      .input('alumno', sql.Int, parseInt(id_alumno, 10))
+    // Insertar cabecera
+    const reqCabecera = new sql.Request(trx)
+      .input('tarea', sql.Int, tareaId)
+      .input('alumno', sql.Int, id_alumno)
       .input('dia', sql.TinyInt, dia)
       .input('mes', sql.TinyInt, mes)
       .input('anio', sql.SmallInt, anio)
@@ -588,65 +581,71 @@ app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
       .input('nit', sql.NVarChar(20), cliente_nit)
       .input('direccion', sql.NVarChar(200), cliente_direccion)
       .input('cta', sql.NVarChar(100), venta_cta_de)
-      .input('son', sql.NVarChar(300), son_texto);
+      .input('son', sql.NVarChar(300), son_texto)
+      .input('sumas', sql.Decimal(10, 2), sumas)
+      .input('venta_exenta', sql.Decimal(10, 2), venta_exenta)
+      .input('venta_no_sujeta', sql.Decimal(10, 2), venta_no_sujeta)
+      .input('iva_retenido', sql.Decimal(10, 2), iva_retenido)
+      .input('venta_total', sql.Decimal(10, 2), venta_total)
+      .input('entregado_nombre', sql.NVarChar(100), entregado_nombre)
+      .input('entregado_dui', sql.NVarChar(20), entregado_dui)
+      .input('entregado_firma', sql.NVarChar(100), entregado_firma)
+      .input('recibido_nombre', sql.NVarChar(100), recibido_nombre)
+      .input('recibido_dui', sql.NVarChar(20), recibido_dui)
+      .input('recibido_firma', sql.NVarChar(100), recibido_firma);
 
-    const hdr = await hdrReq.query(`
+    const cabecera = await reqCabecera.query(`
       INSERT INTO FacturaConsumidorFinal (
         Dia, Mes, Anio,
         NombreCliente, DUI_o_NIT, Direccion, VentaCuentaDe,
-        SonTexto, id_tarea, id_alumno
-      )
-      OUTPUT INSERTED.IdFactura
+        SonTexto, Sumas, VentaExenta, VentaNoSujeta, IvaRetenido, VentaTotal,
+        Entregado_Nombre, Entregado_DUI, Entregado_Firma,
+        Recibido_Nombre, Recibido_DUI, Recibido_Firma,
+        id_tarea, id_alumno
+      ) OUTPUT INSERTED.IdFactura
       VALUES (
         @dia, @mes, @anio,
         @cliente, @nit, @direccion, @cta,
-        @son, @tarea, @alumno
-      );
+        @son, @sumas, @venta_exenta, @venta_no_sujeta, @iva_retenido, @venta_total,
+        @entregado_nombre, @entregado_dui, @entregado_firma,
+        @recibido_nombre, @recibido_dui, @recibido_firma,
+        @tarea, @alumno
+      )
     `);
-    const idFactura = hdr.recordset[0].IdFactura;
 
-    // Inserta detalles
-    for (let d of detalles) {
+    const idFactura = cabecera.recordset[0].IdFactura;
+
+    // Insertar detalles
+    for (const d of detalles) {
       await new sql.Request(trx)
         .input('factura', sql.Int, idFactura)
         .input('cantidad', sql.Int, d.cantidad)
         .input('descripcion', sql.NVarChar(200), d.descripcion)
-        .input('pu', sql.Decimal(10, 2), d.precio_unitario)
-        .input('vns', sql.Decimal(10, 2), d.venta_no_sujeta)
-        .input('ve', sql.Decimal(10, 2), d.venta_exenta)
-        .input('vg', sql.Decimal(10, 2), d.venta_gravada)
-        .input('sumas', sql.Decimal(10, 2), req.body.sumas || 0)
-        .input('ventaExenta', sql.Decimal(10, 2), req.body.ventaExenta || 0)
-        .input('ventaNoSujeta', sql.Decimal(10, 2), req.body.ventaNoSujeta || 0)
-        .input('ivaRetenido', sql.Decimal(10, 2), req.body.ivaRetenido || 0)
-        .input('ventaTotal', sql.Decimal(10, 2), req.body.ventaTotal || 0)
+        .input('precio_unitario', sql.Decimal(10, 2), d.precio_unitario)
+        .input('venta_no_sujeta', sql.Decimal(10, 2), d.venta_no_sujeta)
+        .input('venta_exenta', sql.Decimal(10, 2), d.venta_exenta)
+        .input('venta_gravada', sql.Decimal(10, 2), d.venta_gravada)
         .query(`
-          INSERT INTO FacturaConsumidorFinal (
-  Dia, Mes, Anio,
-  NombreCliente, DUI_o_NIT, Direccion, VentaCuentaDe,
-  SonTexto, Sumas, VentaExenta, VentaNoSujeta, IvaRetenido, VentaTotal,
-  id_tarea, id_alumno
-)
-OUTPUT INSERTED.IdFactura
-VALUES (
-  @dia, @mes, @anio,
-  @cliente, @nit, @direccion, @cta,
-  @son, @sumas, @ventaExenta, @ventaNoSujeta, @ivaRetenido, @ventaTotal,
-  @tarea, @alumno
-);
-
+          INSERT INTO DetalleFacturaConsumidorFinal (
+            IdFactura, Cantidad, Descripcion, PrecioUnitario,
+            VentaNoSujeta, VentaExenta, VentaGravada
+          ) VALUES (
+            @factura, @cantidad, @descripcion, @precio_unitario,
+            @venta_no_sujeta, @venta_exenta, @venta_gravada
+          )
         `);
     }
 
     await trx.commit();
-    res.status(201).json({ mensaje: 'Factura guardada', IdFactura: idFactura });
+    res.status(201).json({ mensaje: 'Factura guardada correctamente', IdFactura: idFactura });
   } catch (err) {
     await trx.rollback();
     console.error(err);
-    if (err.status) return res.status(err.status).json({ error: err.msg });
-    res.status(500).json({ error: 'Error del servidor' });
+    res.status(500).json({ error: 'Error al guardar la factura' });
   }
 });
+
+
 
 app.get('/notas/usuario/:alumnoId', requireLogin, async (req, res) => {
   const { alumnoId } = req.params;
@@ -844,33 +843,46 @@ app.post('/calificar/credito-fiscal/:tareaId/:alumnoId', requireLogin, async (re
   }
 });
 
-// Obtener factura y detalles por id_credito
-app.get('/factura-consumidor-final/:id_credito', async (req, res) => {
-  const { id_credito } = req.params;
+// GET – obtener datos de FacturaConsumidorFinal + detalles
+app.get('/formulario/factura-final', requireLogin, async (req, res) => {
+  const { tarea, alumno } = req.query;
+  if (!tarea || !alumno) {
+    return res.status(400).json({ error: 'Faltan parámetros tarea o alumno' });
+  }
 
   try {
     const pool = await poolPromise;
 
-    // Consulta para obtener la factura principal (ajusta los campos si tienes otros)
-    const facturaResult = await pool.request()
-      .input('id_credito', sql.Int, id_credito)
+    // 1) Cabecera
+    const cabeceraResult = await pool.request()
+      .input('tarea', sql.Int, tarea)
+      .input('alumno', sql.Int, alumno)
       .query(`
-        SELECT * FROM FacturaConsumidorFinal WHERE id_credito = @id_credito
+        SELECT 
+          IdFactura, Dia, Mes, Anio,
+          NombreCliente, DUI_o_NIT, Direccion, VentaCuentaDe,
+          SonTexto, Sumas, VentaExenta, VentaNoSujeta, IvaRetenido, VentaTotal,
+          Entregado_Nombre, Entregado_DUI, Entregado_Firma,
+          Recibido_Nombre, Recibido_DUI, Recibido_Firma,
+          id_tarea, id_alumno, nota
+        FROM FacturaConsumidorFinal
+        WHERE id_tarea = @tarea AND id_alumno = @alumno
       `);
 
-    if (facturaResult.recordset.length === 0) {
-      return res.status(404).json({ message: 'Factura no encontrada' });
+    if (cabeceraResult.recordset.length === 0) {
+      return res.status(404).json({ error: 'Factura no encontrada' });
     }
+    const factura = cabeceraResult.recordset[0];
 
-    const factura = facturaResult.recordset[0];
-
-    // Consulta para obtener los detalles relacionados a esa factura
+    // 2) Detalles
     const detallesResult = await pool.request()
-      .input('id_credito', sql.Int, id_credito)
+      .input('idFactura', sql.Int, factura.IdFactura)
       .query(`
-        SELECT id_detalle, cantidad, descripcion, precio_unitario, no_sujetas, exentas, gravadas
-        FROM DetallesFacturaConsumidorFinal 
-        WHERE id_credito = @id_credito
+        SELECT 
+          IdDetalle, Cantidad, Descripcion, PrecioUnitario,
+          VentaNoSujeta, VentaExenta, VentaGravada
+        FROM DetalleFacturaConsumidorFinal
+        WHERE IdFactura = @idFactura
       `);
 
     res.json({
@@ -878,44 +890,43 @@ app.get('/factura-consumidor-final/:id_credito', async (req, res) => {
       detalles: detallesResult.recordset
     });
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener factura' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener la factura' });
   }
 });
 
-// Actualizar calificación (nota) en factura
-app.put('/factura-consumidor-final/:id_credito/calificar', async (req, res) => {
-  const { id_credito } = req.params;
-  const { nota } = req.body;
 
-  if (nota === undefined || nota < 0 || nota > 10) {
-    return res.status(400).json({ message: 'Nota inválida. Debe estar entre 0 y 10.' });
+// POST – actualizar solo la nota de FacturaConsumidorFinal
+app.post('/formulario/factura-final/nota', requireLogin, async (req, res) => {
+  const { tarea, alumno, nota } = req.body;
+  const valor = parseFloat(nota);
+  if (!tarea || !alumno || isNaN(valor) || valor < 0 || valor > 10) {
+    return res.status(400).json({ error: 'Parámetros inválidos' });
   }
 
   try {
     const pool = await poolPromise;
-    const updateResult = await pool.request()
-      .input('nota', sql.Decimal(3, 1), nota)
-      .input('id_credito', sql.Int, id_credito)
+    const result = await pool.request()
+      .input('nota', sql.Decimal(3,1), valor)
+      .input('tarea', sql.Int, tarea)
+      .input('alumno', sql.Int, alumno)
       .query(`
         UPDATE FacturaConsumidorFinal
         SET nota = @nota
-        WHERE id_credito = @id_credito
+        WHERE id_tarea = @tarea AND id_alumno = @alumno
       `);
 
-    if (updateResult.rowsAffected[0] === 0) {
-      return res.status(404).json({ message: 'Factura no encontrada para actualizar' });
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ error: 'Registro no encontrado para nota' });
     }
 
-    res.json({ message: 'Calificación actualizada correctamente' });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al actualizar calificación' });
+    res.json({ mensaje: 'Nota guardada correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al guardar la nota' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
