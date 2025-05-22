@@ -6,6 +6,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   .then(response => response.json())
   .then(data => {
     console.log(data.mensaje);
+    localStorage.clear();
     window.location.href = '/DSS/frontend/Vista_login.html';
   })
   .catch(error => {

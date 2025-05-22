@@ -214,7 +214,7 @@ app.post('/tareas', requireLogin, async (req, res) => {
   if (!id_seccion || isNaN(id_seccion)) {
     return res.status(400).json({ error: 'Debe seleccionar una sección válida.' });
   }
-  if (![1,2,3].includes(Number(tipo_tarea))) {
+  if (![1, 2, 3].includes(Number(tipo_tarea))) {
     return res.status(400).json({ error: 'Tipo de tarea inválido.' });
   }
 
@@ -223,7 +223,7 @@ app.post('/tareas', requireLogin, async (req, res) => {
     await pool.request()
       .input('idSeccion', sql.Int, id_seccion)
       .input('idMaestro', sql.Int, id_maestro)
-      .input('tipo',     sql.TinyInt, tipo_tarea)
+      .input('tipo', sql.TinyInt, tipo_tarea)
       .query(`
         INSERT INTO tareas (id_seccion, id_maestro, tipo_tarea)
         VALUES (@idSeccion, @idMaestro, @tipo)
@@ -328,7 +328,7 @@ app.post('/credito-fiscal/:tareaId', async (req, res) => {
   for (let i = 0; i < detalles.length; i++) {
     const d = detalles[i];
     if (!d.descripcion || d.descripcion.trim() === '') {
-      return res.status(400).json({ error: `Descripción detalle #${i+1} es obligatoria.` });
+      return res.status(400).json({ error: `Descripción detalle #${i + 1} es obligatoria.` });
     }
     if (
       d.cantidad == null || isNaN(d.cantidad) || Number(d.cantidad) <= 0 ||
@@ -338,14 +338,14 @@ app.post('/credito-fiscal/:tareaId', async (req, res) => {
       d.gravadas == null || isNaN(d.gravadas) || Number(d.gravadas) < 0
     ) {
       return res.status(400).json({
-        error: `Valores numéricos inválidos en detalle #${i+1}. Deben ser >= 0 (cantidad > 0).`
+        error: `Valores numéricos inválidos en detalle #${i + 1}. Deben ser >= 0 (cantidad > 0).`
       });
     }
   }
 
   // 4) Inserción en transacción
   const pool = await poolPromise;
-  const trx  = new sql.Transaction(pool);
+  const trx = new sql.Transaction(pool);
 
   try {
     await trx.begin();
@@ -367,13 +367,13 @@ app.post('/credito-fiscal/:tareaId', async (req, res) => {
       .input('condicion', sql.NVarChar(50), condicion)
       .input('venta_cta_de', sql.NVarChar(150), venta_cta_de)
       .input('total_literal', sql.NVarChar(300), total_literal)
-      .input('suma', sql.Decimal(10,2), suma)
-      .input('iva13', sql.Decimal(10,2), iva13)
-      .input('sub_total', sql.Decimal(10,2), sub_total)
-      .input('iva_retenido', sql.Decimal(10,2), iva_retenido)
-      .input('ventas_exentas', sql.Decimal(10,2), ventas_exentas)
-      .input('ventas_no_sujetas', sql.Decimal(10,2), ventas_no_sujetas)
-      .input('venta_total', sql.Decimal(10,2), venta_total)
+      .input('suma', sql.Decimal(10, 2), suma)
+      .input('iva13', sql.Decimal(10, 2), iva13)
+      .input('sub_total', sql.Decimal(10, 2), sub_total)
+      .input('iva_retenido', sql.Decimal(10, 2), iva_retenido)
+      .input('ventas_exentas', sql.Decimal(10, 2), ventas_exentas)
+      .input('ventas_no_sujetas', sql.Decimal(10, 2), ventas_no_sujetas)
+      .input('venta_total', sql.Decimal(10, 2), venta_total)
       .input('entregado_nombre', sql.NVarChar(100), entregado_nombre)
       .input('entregado_dui', sql.NVarChar(20), entregado_dui)
       .input('entregado_firma', sql.NVarChar(100), entregado_firma)
@@ -412,13 +412,13 @@ app.post('/credito-fiscal/:tareaId', async (req, res) => {
     // Detalles: cada uno con su propio Request para evitar parámetros duplicados
     for (const d of detalles) {
       await new sql.Request(trx)
-        .input('credito',        sql.Int,     idCredito)
-        .input('cantidad',       sql.Int,     d.cantidad)
-        .input('descripcion',    sql.NVarChar(200), d.descripcion)
-        .input('precio_unitario',sql.Decimal(10,2), d.precio_unitario)
-        .input('no_sujetas',     sql.Decimal(10,2), d.no_sujetas)
-        .input('exentas',        sql.Decimal(10,2), d.exentas)
-        .input('gravadas',       sql.Decimal(10,2), d.gravadas)
+        .input('credito', sql.Int, idCredito)
+        .input('cantidad', sql.Int, d.cantidad)
+        .input('descripcion', sql.NVarChar(200), d.descripcion)
+        .input('precio_unitario', sql.Decimal(10, 2), d.precio_unitario)
+        .input('no_sujetas', sql.Decimal(10, 2), d.no_sujetas)
+        .input('exentas', sql.Decimal(10, 2), d.exentas)
+        .input('gravadas', sql.Decimal(10, 2), d.gravadas)
         .query(`
           INSERT INTO credito_fiscal_detalle (
             id_credito, cantidad, descripcion,
@@ -451,70 +451,77 @@ app.post('/nota-credito/:tareaId', requireLogin, async (req, res) => {
   } = req.body;
 
   // 1) Validaciones básicas
-  if (!id_alumno) return res.status(400).json({ error:'Falta id_alumno' });
-  for (let [k,v] of [
+  if (!id_alumno) return res.status(400).json({ error: 'Falta id_alumno' });
+  for (let [k, v] of [
     ['cliente_nombre', cliente_nombre],
-    ['direccion',       direccion],
+    ['direccion', direccion],
     ['doc_modifica_tipo', doc_modifica_tipo],
-    ['serie_numero',    serie_numero]
+    ['serie_numero', serie_numero]
   ]) {
     if (!v || !String(v).trim())
-      return res.status(400).json({ error:`${k} es obligatorio` });
+      return res.status(400).json({ error: `${k} es obligatorio` });
   }
   if (!Array.isArray(detalles) || detalles.length === 0)
-    return res.status(400).json({ error:'Debes enviar al menos un detalle' });
-  detalles.forEach((d,i) => {
+    return res.status(400).json({ error: 'Debes enviar al menos un detalle' });
+  detalles.forEach((d, i) => {
     if (!d.descripcion || !d.descripcion.trim())
-      throw { status:400, msg:`Falta descripción en detalle #${i+1}` };
+      throw { status: 400, msg: `Falta descripción en detalle #${i + 1}` };
     if (d.cantidad <= 0 || d.precio_unitario < 0 || d.descuento < 0 || d.valor_venta < 0)
-      throw { status:400, msg:`Valores inválidos en detalle #${i+1}` };
+      throw { status: 400, msg: `Valores inválidos en detalle #${i + 1}` };
   });
 
   const pool = await poolPromise;
-  const trx  = new sql.Transaction(pool);
+  const trx = new sql.Transaction(pool);
   try {
     await trx.begin();
 
     // 2) Inserción cabecera con id_alumno
     const headerReq = new sql.Request(trx)
-      .input('tarea',           sql.Int,        parseInt(tareaId,10))
-      .input('alumno',          sql.Int,        parseInt(id_alumno,10))
-      .input('cliente',         sql.NVarChar(100), cliente_nombre)
-      .input('fecha',           sql.Date,       fecha)
-      .input('direccion',       sql.NVarChar(200), direccion)
-      .input('tipo',            sql.NVarChar(50),  doc_modifica_tipo)
-      .input('serie',           sql.NVarChar(50),  serie_numero)
-      .input('fechaOrig',       sql.Date,       fecha_original)
-      .input('motivo',          sql.NVarChar(300), motivo_modificacion);
+      .input('tarea', sql.Int, parseInt(tareaId, 10))
+      .input('alumno', sql.Int, parseInt(id_alumno, 10))
+      .input('cliente', sql.NVarChar(100), cliente_nombre)
+      .input('fecha', sql.Date, fecha)
+      .input('direccion', sql.NVarChar(200), direccion)
+      .input('tipo', sql.NVarChar(50), doc_modifica_tipo)
+      .input('serie', sql.NVarChar(50), serie_numero)
+      .input('fechaOrig', sql.Date, fecha_original)
+      .input('motivo', sql.NVarChar(300), motivo_modificacion)
+      .input('subtotal', sql.Decimal(10, 2), req.body.subtotal || 0)
+      .input('igv', sql.Decimal(10, 2), req.body.igv || 0)
+      .input('total', sql.Decimal(10, 2), req.body.total || 0);
+
 
     const hdr = await headerReq.query(`
       INSERT INTO nota_credito (
-        id_tarea, id_alumno,
-        cliente_nombre, fecha_emision, direccion,
-        doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
-        motivo_modificacion
-      )
-      OUTPUT INSERTED.id_nota
-      VALUES (
-        @tarea, @alumno,
-        @cliente, @fecha, @direccion,
-        @tipo,    @serie,  @fechaOrig,
-        @motivo
-      );
+  id_tarea, id_alumno,
+  cliente_nombre, fecha_emision, direccion,
+  doc_modifica_tipo, doc_modifica_serie_numero, fecha_original,
+  motivo_modificacion,
+  subtotal, igv, total
+)
+OUTPUT INSERTED.id_nota
+VALUES (
+  @tarea, @alumno,
+  @cliente, @fecha, @direccion,
+  @tipo,    @serie,  @fechaOrig,
+  @motivo,
+  @subtotal, @igv, @total
+);
+
     `);
     const idNota = hdr.recordset[0].id_nota;
 
     // 3) Inserción de cada detalle
     for (let d of detalles) {
       await new sql.Request(trx)
-        .input('nota',           sql.Int,        idNota)
-        .input('item',           sql.Int,        parseInt(d.item,10) || 0)
-        .input('codigo',         sql.NVarChar(50), d.codigo)
-        .input('cantidad',       sql.Int,        d.cantidad)
-        .input('descripcion',    sql.NVarChar(200), d.descripcion)
-        .input('precio_unitario',sql.Decimal(10,2), d.precio_unitario)
-        .input('descuento',      sql.Decimal(10,2), d.descuento)
-        .input('valor_venta',    sql.Decimal(10,2), d.valor_venta)
+        .input('nota', sql.Int, idNota)
+        .input('item', sql.Int, parseInt(d.item, 10) || 0)
+        .input('codigo', sql.NVarChar(50), d.codigo)
+        .input('cantidad', sql.Int, d.cantidad)
+        .input('descripcion', sql.NVarChar(200), d.descripcion)
+        .input('precio_unitario', sql.Decimal(10, 2), d.precio_unitario)
+        .input('descuento', sql.Decimal(10, 2), d.descuento)
+        .input('valor_venta', sql.Decimal(10, 2), d.valor_venta)
         .query(`
           INSERT INTO nota_credito_detalle (
             id_nota, item, codigo, cantidad,
@@ -527,13 +534,13 @@ app.post('/nota-credito/:tareaId', requireLogin, async (req, res) => {
     }
 
     await trx.commit();
-    res.status(201).json({ mensaje:'Nota de crédito guardada', id_nota:idNota });
+    res.status(201).json({ mensaje: 'Nota de crédito guardada', id_nota: idNota });
 
-  } catch(err) {
+  } catch (err) {
     await trx.rollback();
     console.error(err);
     if (err.status) return res.status(err.status).json({ error: err.msg });
-    res.status(500).json({ error:'Error del servidor' });
+    res.status(500).json({ error: 'Error del servidor' });
   }
 });
 
@@ -548,40 +555,40 @@ app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
   } = req.body;
 
   // 1) Validaciones básicas
-  if (!id_alumno) return res.status(400).json({ error:'Falta id_alumno' });
-  for (let [k,v] of [
+  if (!id_alumno) return res.status(400).json({ error: 'Falta id_alumno' });
+  for (let [k, v] of [
     ['dia', dia], ['mes', mes], ['anio', anio],
     ['cliente_nombre', cliente_nombre]
   ]) {
-    if (v == null || v === '' ) return res.status(400).json({ error:`${k} es obligatorio` });
+    if (v == null || v === '') return res.status(400).json({ error: `${k} es obligatorio` });
   }
   if (!Array.isArray(detalles) || detalles.length === 0)
-    return res.status(400).json({ error:'Debes enviar al menos un detalle' });
-  detalles.forEach((d,i) => {
+    return res.status(400).json({ error: 'Debes enviar al menos un detalle' });
+  detalles.forEach((d, i) => {
     if (!d.descripcion || !d.descripcion.trim())
-      throw { status:400, msg:`Falta descripción en detalle #${i+1}` };
+      throw { status: 400, msg: `Falta descripción en detalle #${i + 1}` };
     if (d.cantidad < 0 || d.precio_unitario < 0 ||
-        d.venta_no_sujeta < 0 || d.venta_exenta < 0 || d.venta_gravada < 0)
-      throw { status:400, msg:`Valores inválidos en detalle #${i+1}` };
+      d.venta_no_sujeta < 0 || d.venta_exenta < 0 || d.venta_gravada < 0)
+      throw { status: 400, msg: `Valores inválidos en detalle #${i + 1}` };
   });
 
   const pool = await poolPromise;
-  const trx  = new sql.Transaction(pool);
+  const trx = new sql.Transaction(pool);
   try {
     await trx.begin();
 
     // Inserta cabecera
     const hdrReq = new sql.Request(trx)
-      .input('tarea',      sql.Int,         parseInt(tareaId,10))
-      .input('alumno',     sql.Int,         parseInt(id_alumno,10))
-      .input('dia',        sql.TinyInt,     dia)
-      .input('mes',        sql.TinyInt,     mes)
-      .input('anio',       sql.SmallInt,    anio)
-      .input('cliente',    sql.NVarChar(100), cliente_nombre)
-      .input('nit',        sql.NVarChar(20),  cliente_nit)
-      .input('direccion',  sql.NVarChar(200), cliente_direccion)
-      .input('cta',        sql.NVarChar(100), venta_cta_de)
-      .input('son',        sql.NVarChar(300), son_texto);
+      .input('tarea', sql.Int, parseInt(tareaId, 10))
+      .input('alumno', sql.Int, parseInt(id_alumno, 10))
+      .input('dia', sql.TinyInt, dia)
+      .input('mes', sql.TinyInt, mes)
+      .input('anio', sql.SmallInt, anio)
+      .input('cliente', sql.NVarChar(100), cliente_nombre)
+      .input('nit', sql.NVarChar(20), cliente_nit)
+      .input('direccion', sql.NVarChar(200), cliente_direccion)
+      .input('cta', sql.NVarChar(100), venta_cta_de)
+      .input('son', sql.NVarChar(300), son_texto);
 
     const hdr = await hdrReq.query(`
       INSERT INTO FacturaConsumidorFinal (
@@ -601,32 +608,43 @@ app.post('/factura-final/:tareaId', requireLogin, async (req, res) => {
     // Inserta detalles
     for (let d of detalles) {
       await new sql.Request(trx)
-        .input('factura',       sql.Int,       idFactura)
-        .input('cantidad',      sql.Int,       d.cantidad)
-        .input('descripcion',   sql.NVarChar(200), d.descripcion)
-        .input('pu',            sql.Decimal(10,2), d.precio_unitario)
-        .input('vns',           sql.Decimal(10,2), d.venta_no_sujeta)
-        .input('ve',            sql.Decimal(10,2), d.venta_exenta)
-        .input('vg',            sql.Decimal(10,2), d.venta_gravada)
+        .input('factura', sql.Int, idFactura)
+        .input('cantidad', sql.Int, d.cantidad)
+        .input('descripcion', sql.NVarChar(200), d.descripcion)
+        .input('pu', sql.Decimal(10, 2), d.precio_unitario)
+        .input('vns', sql.Decimal(10, 2), d.venta_no_sujeta)
+        .input('ve', sql.Decimal(10, 2), d.venta_exenta)
+        .input('vg', sql.Decimal(10, 2), d.venta_gravada)
+        .input('sumas', sql.Decimal(10, 2), req.body.sumas || 0)
+        .input('ventaExenta', sql.Decimal(10, 2), req.body.ventaExenta || 0)
+        .input('ventaNoSujeta', sql.Decimal(10, 2), req.body.ventaNoSujeta || 0)
+        .input('ivaRetenido', sql.Decimal(10, 2), req.body.ivaRetenido || 0)
+        .input('ventaTotal', sql.Decimal(10, 2), req.body.ventaTotal || 0)
         .query(`
-          INSERT INTO DetalleFacturaConsumidorFinal (
-            IdFactura, Cantidad, Descripcion,
-            PrecioUnitario, VentaNoSujeta, VentaExenta, VentaGravada
-          )
-          VALUES (
-            @factura, @cantidad, @descripcion,
-            @pu, @vns, @ve, @vg
-          );
+          INSERT INTO FacturaConsumidorFinal (
+  Dia, Mes, Anio,
+  NombreCliente, DUI_o_NIT, Direccion, VentaCuentaDe,
+  SonTexto, Sumas, VentaExenta, VentaNoSujeta, IvaRetenido, VentaTotal,
+  id_tarea, id_alumno
+)
+OUTPUT INSERTED.IdFactura
+VALUES (
+  @dia, @mes, @anio,
+  @cliente, @nit, @direccion, @cta,
+  @son, @sumas, @ventaExenta, @ventaNoSujeta, @ivaRetenido, @ventaTotal,
+  @tarea, @alumno
+);
+
         `);
     }
 
     await trx.commit();
-    res.status(201).json({ mensaje:'Factura guardada', IdFactura:idFactura });
-  } catch(err) {
+    res.status(201).json({ mensaje: 'Factura guardada', IdFactura: idFactura });
+  } catch (err) {
     await trx.rollback();
     console.error(err);
     if (err.status) return res.status(err.status).json({ error: err.msg });
-    res.status(500).json({ error:'Error del servidor' });
+    res.status(500).json({ error: 'Error del servidor' });
   }
 });
 
@@ -678,6 +696,223 @@ app.get('/notas/usuario/:alumnoId', requireLogin, async (req, res) => {
   } catch (err) {
     console.error('Error al obtener notas de usuario:', err);
     res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+// Devuelve todas las entregas (ya calificadas o no) de una sección,
+app.post('/entregas/seccion/:id', requireLogin, async (req, res) => {
+  const secId = parseInt(req.params.id, 10);
+  const maestroId = parseInt(req.body.maestroId, 10);
+  if (!maestroId || !secId) return res.status(400).json({ error: 'Datos incompletos' });
+
+  const pool = await poolPromise;
+
+  const qr = `
+    SELECT cf.id_tarea AS tareaId, cf.id_alumno AS alumnoId, u.codigo, u.nombre, t.tipo_tarea
+    FROM credito_fiscal cf
+    JOIN tareas t 
+      ON t.id = cf.id_tarea 
+      AND t.id_seccion = @sec 
+      AND t.id_maestro = @maestro
+    JOIN usuarios u ON u.id = cf.id_alumno
+
+    UNION ALL
+
+    SELECT f.id_tarea, f.id_alumno, u.codigo, u.nombre, t.tipo_tarea
+    FROM FacturaConsumidorFinal f
+    JOIN tareas t 
+      ON t.id = f.id_tarea 
+      AND t.id_seccion = @sec 
+      AND t.id_maestro = @maestro
+    JOIN usuarios u ON u.id = f.id_alumno
+
+    UNION ALL
+
+    SELECT n.id_tarea, n.id_alumno, u.codigo, u.nombre, t.tipo_tarea
+    FROM nota_credito n
+    JOIN tareas t 
+      ON t.id = n.id_tarea 
+      AND t.id_seccion = @sec 
+      AND t.id_maestro = @maestro
+    JOIN usuarios u ON u.id = n.id_alumno;
+  `;
+
+  try {
+    const result = await pool.request()
+      .input('sec', sql.Int, secId)
+      .input('maestro', sql.Int, maestroId)
+      .query(qr);
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+app.get('/formulario/credito-fiscal/:tareaId/:alumnoId', requireLogin, async (req, res) => {
+  const { tareaId, alumnoId } = req.params;
+  const pool = await poolPromise;
+
+  try {
+    const cabecera = await pool.request()
+      .input('tareaId', sql.Int, tareaId)
+      .input('alumnoId', sql.Int, alumnoId)
+      .query(`
+        SELECT TOP 1 *
+        FROM credito_fiscal
+        WHERE id_tarea = @tareaId AND id_alumno = @alumnoId
+      `);
+
+    if (cabecera.recordset.length === 0) {
+      return res.status(404).json({ error: 'Formulario no encontrado' });
+    }
+
+    const datos = cabecera.recordset[0];
+
+    const detalles = await pool.request()
+      .input('id_credito', sql.Int, datos.id_credito)
+      .query(`
+        SELECT cantidad, descripcion, precio_unitario, no_sujetas, exentas, gravadas
+        FROM credito_fiscal_detalle
+        WHERE id_credito = @id_credito
+      `);
+
+    res.json({
+      cliente_nombre: datos.cliente_nombre,
+      fecha: datos.fecha,
+      direccion: datos.direccion,
+      municipio: datos.municipio,
+      departamento: datos.departamento,
+      nit: datos.nit,
+      registro: datos.registro,
+      giro: datos.giro,
+      nota_remision: datos.nota_remision,
+      fecha_nota: datos.fecha_nota,
+      condicion: datos.condicion,
+      venta_cta_de: datos.venta_cta_de,
+      total_literal: datos.total_literal,
+      suma: datos.suma,
+      iva13: datos.iva13,
+      sub_total: datos.sub_total,
+      iva_retenido: datos.iva_retenido,
+      ventas_exentas: datos.ventas_exentas,
+      ventas_no_sujetas: datos.ventas_no_sujetas,
+      venta_total: datos.venta_total,
+      entregado_nombre: datos.entregado_nombre,
+      entregado_dui: datos.entregado_dui,
+      entregado_firma: datos.entregado_firma,
+      recibido_nombre: datos.recibido_nombre,
+      recibido_dui: datos.recibido_dui,
+      recibido_firma: datos.recibido_firma,
+      nota: datos.nota,
+      detalles: detalles.recordset
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+app.post('/calificar/credito-fiscal/:tareaId/:alumnoId', requireLogin, async (req, res) => {
+  const { tareaId, alumnoId } = req.params;
+  const { nota } = req.body;
+
+  if (typeof nota !== 'number' || nota < 0 || nota > 10)
+    return res.status(400).json({ error: 'La nota debe estar entre 0 y 10' });
+
+  const pool = await poolPromise;
+  try {
+    const result = await pool.request()
+      .input('nota', sql.Decimal(3, 1), nota)
+      .input('tareaId', sql.Int, tareaId)
+      .input('alumnoId', sql.Int, alumnoId)
+      .query(`
+        UPDATE credito_fiscal
+        SET nota = @nota
+        WHERE id_tarea = @tareaId AND id_alumno = @alumnoId
+      `);
+
+    if (result.rowsAffected[0] === 0)
+      return res.status(404).json({ error: 'Registro no encontrado' });
+
+    res.json({ mensaje: 'Nota actualizada correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+// Obtener factura y detalles por id_credito
+app.get('/factura-consumidor-final/:id_credito', async (req, res) => {
+  const { id_credito } = req.params;
+
+  try {
+    const pool = await poolPromise;
+
+    // Consulta para obtener la factura principal (ajusta los campos si tienes otros)
+    const facturaResult = await pool.request()
+      .input('id_credito', sql.Int, id_credito)
+      .query(`
+        SELECT * FROM FacturaConsumidorFinal WHERE id_credito = @id_credito
+      `);
+
+    if (facturaResult.recordset.length === 0) {
+      return res.status(404).json({ message: 'Factura no encontrada' });
+    }
+
+    const factura = facturaResult.recordset[0];
+
+    // Consulta para obtener los detalles relacionados a esa factura
+    const detallesResult = await pool.request()
+      .input('id_credito', sql.Int, id_credito)
+      .query(`
+        SELECT id_detalle, cantidad, descripcion, precio_unitario, no_sujetas, exentas, gravadas
+        FROM DetallesFacturaConsumidorFinal 
+        WHERE id_credito = @id_credito
+      `);
+
+    res.json({
+      factura,
+      detalles: detallesResult.recordset
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener factura' });
+  }
+});
+
+// Actualizar calificación (nota) en factura
+app.put('/factura-consumidor-final/:id_credito/calificar', async (req, res) => {
+  const { id_credito } = req.params;
+  const { nota } = req.body;
+
+  if (nota === undefined || nota < 0 || nota > 10) {
+    return res.status(400).json({ message: 'Nota inválida. Debe estar entre 0 y 10.' });
+  }
+
+  try {
+    const pool = await poolPromise;
+    const updateResult = await pool.request()
+      .input('nota', sql.Decimal(3, 1), nota)
+      .input('id_credito', sql.Int, id_credito)
+      .query(`
+        UPDATE FacturaConsumidorFinal
+        SET nota = @nota
+        WHERE id_credito = @id_credito
+      `);
+
+    if (updateResult.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: 'Factura no encontrada para actualizar' });
+    }
+
+    res.json({ message: 'Calificación actualizada correctamente' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar calificación' });
   }
 });
 

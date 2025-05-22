@@ -226,6 +226,9 @@
         motivo_modificacion: document.getElementById('motivo').value.trim(),
         detalles:            []
       };
+      body.subtotal = parseFloat(document.getElementById('subTotal').value) || 0;
+      body.igv      = parseFloat(document.getElementById('igv').value) || 0;
+      body.total    = parseFloat(document.getElementById('total').value) || 0;
 
       // Validar cabecera
       for (const [k,v] of [

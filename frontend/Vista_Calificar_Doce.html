@@ -1,51 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        <script src="../frontend/assets/sesionDoce.js"></script>
-    <title>Document</title>
-</head>
-<body>
-    <!-- component -->
-<!DOCTYPE html>
 <html lang="es">
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Agregar estilos para la vista de dispositivos pequeños */
-        @media (max-width: 768px) {
-            .flex-wrap {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            .section-small {
-                width: 50%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
+  <script src="../frontend/assets/sesionDoce.js" defer></script>
+  <script src="../frontend/assets/cerrarSesion.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <title>Revisión de Entregas</title>
 </head>
-<body>
-<div class="flex flex-col h-screen ">
+<body class="flex flex-col h-screen bg-gray-100">
 
-    <!-- Barra de navegación superior -->
-    <div class="bg-gray-100 text-white shadow w-full p-2 flex items-center justify-between">
-        <div class="flex items-center">
-            <div class="hidden md:flex items-center"> <!-- Se oculta en dispositivos pequeños -->
-               <a href="../frontend/vista_index_Doce.html"><h2 class="font-bold text-xl text-gray-500">FactuEdu</h2></a>
-                
-            </div>
-           
-        </div>
-
-        <div class="space-x-5">
-        </div>
+  <!-- Barra superior -->
+  <div class="bg-white text-gray-500 shadow w-full p-2 flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="hidden md:flex items-center">
+        <h2 class="font-bold text-xl">FactuEdu</h2>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button id="menuBtn"><i class="fas fa-bars text-gray-500 text-lg"></i></button>
+      </div>
     </div>
+    <div class="space-x-5"></div>
+  </div>
 
-    <!-- Contenido principal -->
-    <div class="flex-1 flex">
+  <div class="flex-1 flex">
+    <!-- Sidebar -->
+     <div class="flex-1 flex">
         <!-- Barra lateral de navegación (oculta en dispositivos pequeños) -->
         <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
             <nav>
@@ -62,10 +43,11 @@
                     <i class="fas fa-users mr-2"></i>Crear grupo
                 </a>
                 <!-- Ítem de Cerrar Sesión -->
-            <a id='logoutBtn' class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
+            <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#">
                 <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
             </a>
             </nav>
+
 
 
 
@@ -77,126 +59,129 @@
 
         </div>
 
-        <!-- Área de contenido principal -->
-        <div class="flex-1 p-4">
-           
-              <!-- component -->
-<div class="transition-colors duration-300">
-    <div class="container mx-auto p-4">
-        <div class="bg-white  shadow rounded-lg p-6">
-            <h1 class="text-xl font-semibold mb-4 text-gray-900 ">FactuEdu</h1>
-            <!-- Option -->
-            
-            <form>
-                 <!-- Option seccion -->
-                <p class="text-gray-600  mb-6">Seleccione una seccion</p>
-                 <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                        <option>Seccion 3B</option>
-                        <option>Seccion 3A</option>
-                        
-                    </select>
-                </div>
-                 <!-- Option Prueba -->
-                <p class="text-gray-600  mb-6">Seleccione una prueba</p>
-                <div class="mb-4">
-                    <select class="border p-2 rounded w-full">
-                        <option>Credito fiscal</option>
-                        <option>Cliente final</option>
-                        
-                    </select>
-                </div>
-                 <!-- Button Guardar-->
-                <button type="button" id="theme-toggle" class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none transition-colors">
-                    Guardar 
-                </button>
-            </form>
-        </div>
+
+    <!-- Contenido principal -->
+    <div class="flex-1 p-4">
+      <h1 class="text-xl font-semibold mb-4">Entregas por Sección</h1>
+      <div class="mb-4">
+        <label class="text-sm font-medium text-gray-600">Seleccionar sección:</label>
+        <select id="select-seccion" class="mt-1 border rounded px-3 py-1 text-sm">
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+
+      <div class="overflow-auto rounded bg-white shadow">
+        <table class="w-full table-auto text-sm text-center">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="py-2 px-4 border-b">Carnet</th>
+              <th class="py-2 px-4 border-b">Nombre</th>
+              <th class="py-2 px-4 border-b">Tipo</th>
+              <th class="py-2 px-4 border-b">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="entregas-body">
+            <tr><td colspan="4" class="text-center py-4">Seleccione una sección</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-        
-            <!-- Contenedor) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
-               
-            
-            
-            <div class="bg-white p-4 rounded-md">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Credito fiscal 3 A</h2>
-                <div class="my-1"></div> <!-- Espacio de separación -->
-                <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-                <table class="w-full table-auto text-sm">
-                    <thead>
-                        <tr class="text-sm leading-normal">
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Carnet</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Nombre</th>
-                            <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">Calificar</th>
-                        </tr>
-                    
-     
-                    </thead>
-                    <tbody>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="py-2 px-4 border-b border-grey-light">013125</td>
-                            <td class="py-2 px-4 border-b border-grey-light">Juan Pérez</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center"><a class="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-green-400 hover:to-green-300 hover:text-white mt-auto" href="#">Calificar</a></td>
-                        </tr>
-                                                <!-- Añade más filas aquí como la anterior-->
-                      
-                    </tbody>
-                    </table>
-                    <div class="p-2">
-                        <a class="block  py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-cyan-300 hover:text-white mt-auto text-center" href="#">Listo</a>
-                    </div>
-                </div>
 
-               
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+  <script>
+    // Mapear tipo a texto
+    function textoTipo(t) {
+      switch (t) {
+        case 1: return 'Crédito fiscal';
+        case 2: return 'Factura consumidor final';
+        case 3: return 'Nota de crédito';
+        default: return 'Desconocido';
+      }
+    }
 
- <!-- Alert INCORRECTO -->
-<div
-  class=" hidden top-4 left-1/2 -translate-x-1/2 z-50 font-regular w-full max-w-screen-md rounded-lg bg-red-400 bg-opacity-50 px-4 py-4 text-base text-white"
-  data-dismissible="alert "
->
-  <!-- icono -->
-  <div class="absolute top-4 left-4">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="currentColor" aria-hidden="true" class="mt-px h-6 w-6">
-      <path fill-rule="evenodd"
-            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
-            clip-rule="evenodd" />
-    </svg>
-  </div>
+    // Construir URL del formulario de solo lectura
+    function urlForm(t, tareaId, alumnoId) {
+      switch (t) {
+        case 1: return `Vista_Form_Credito_Fiscal_Doce.html?tarea=${tareaId}&alumno=${alumnoId}`;
+        case 2: return `Vista_Form_Consumidor_Final_Doce.html?tarea=${tareaId}&alumno=${alumnoId}`;
+        case 3: return `Vista_Form_Nota_Credito_Doce.html?tarea=${tareaId}&alumno=${alumnoId}`;
+        default: return '#';
+      }
+    }
 
-  <!-- texto -->
-  <div class="ml-8 mr-12">
-    <h5 class="text-xl font-semibold">Error 00010</h5>
-    <p class="mt-2">Esta prueba ya se asigno</p>
-  </div>
+    // Cargar secciones
+    async function cargarSecciones() {
+      try {
+        const res = await fetch('http://localhost:4000/seccionesListar', { credentials: 'include' });
+        const secciones = await res.json();
+        const sel = document.getElementById('select-seccion');
+        secciones.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.nombre} (${s.anio})`;
+          sel.appendChild(opt);
+        });
+      } catch (err) {
+        console.error('Error al cargar secciones:', err);
+      }
+    }
 
-  <!-- botón de cierre (intacto) -->
-  <div
-    data-dismissible-target="alert"
-    data-ripple-dark="true"
-    class="absolute top-3 right-3 w-max rounded-lg transition-all hover:bg-white hover:bg-opacity-20"
-  >
-    <div role="button" class="w-max rounded-lg p-1">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </div>
-  </div>
-</div>
+    // Cargar entregas filtradas por sección y profesor logueado
+    async function cargarEntregas(seccionId) {
+      const tbody = document.getElementById('entregas-body');
+      const maestroId = localStorage.getItem('id');
 
+      if (!seccionId || !maestroId) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4">Seleccione una sección</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4">Cargando…</td></tr>`;
+
+      try {
+        const res = await fetch(`http://localhost:4000/entregas/seccion/${seccionId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ maestroId: parseInt(maestroId, 10) })
+        });
+
+        const entregas = await res.json();
+
+        if (!res.ok) throw new Error(entregas.error || 'Error del servidor');
+
+        if (entregas.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No hay entregas</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = entregas.map(e => `
+          <tr class="hover:bg-gray-50">
+            <td class="py-2 px-4 border-b">${e.codigo}</td>
+            <td class="py-2 px-4 border-b">${e.nombre}</td>
+            <td class="py-2 px-4 border-b">${textoTipo(e.tipo_tarea)}</td>
+            <td class="py-2 px-4 border-b">
+              <a href="${urlForm(e.tipo_tarea, e.tareaId, e.alumnoId)}"
+                 class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Ver
+              </a>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Error al cargar entregas:', err);
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-red-500 py-4">Error de conexión</td></tr>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarSecciones();
+      document.getElementById('select-seccion').addEventListener('change', e => {
+        cargarEntregas(e.target.value);
+      });
+    });
+  </script>
 </body>
-</html>
-</body>
-<script src="../frontend/assets/cerrarSesion.js"></script>
 </html>

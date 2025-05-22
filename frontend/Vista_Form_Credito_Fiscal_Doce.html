@@ -1,118 +1,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" defer></script>
   <script src="../frontend/assets/sesionDoce.js" defer></script>
   <script src="../frontend/assets/cerrarSesion.js" defer></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
   <title>Ver Crédito Fiscal</title>
-  <style>
-    @media (max-width: 768px) { .flex-wrap {display:flex;flex-wrap:wrap;} .section-small{width:50%;} }
-  </style>
 </head>
 <body class="flex flex-col h-screen bg-gray-100">
 
-  <!-- NAV / SIDEBAR igual a tu plantilla original -->
-  <!-- … -->
+  <div class="flex-1 flex">
+    <!-- Sidebar -->
+    <div class="p-2 bg-gray-100 w-60 flex flex-col hidden md:flex" id="sideNav">
+      <nav>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Select_Prueba_Doce.html"><i class="fas fa-users mr-2"></i>Asignar prueba</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Calificar_Doce.html"><i class="fas fa-file-alt mr-2"></i>Calificar</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Notas_Doce.html"><i class="fas fa-file-alt mr-2"></i>Ver notas</a>
+        <a class="block text-gray-500 py-2.5 px-4 my-4 rounded hover:bg-gradient-to-r hover:from-cyan-400 hover:to-cyan-300 hover:text-white" href="Vista_Crear_Grupo_Doce.html"><i class="fas fa-users mr-2"></i>Crear grupo</a>
+        <a id="logoutBtn" class="block text-gray-500 py-2.5 px-4 my-2 rounded hover:bg-gradient-to-r hover:from-red-400 hover:to-red-300 hover:text-white mt-auto" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión</a>
+      </nav>
+      <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mt-2"></div>
+      <p class="mb-1 px-5 py-3 text-left text-xs text-cyan-500">DSS COMPANY</p>
+    </div>
 
-  <div class="flex-1 p-4 overflow-auto">
-    <form id="viewCredito" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
-      <!-- 1. Encabezado -->
-      <header class="grid gap-4 md:grid-cols-3 border-b pb-4">
-        <div class="col-span-2 flex flex-col items-center text-center">
-          <img src="../frontend/img/logo_edu.png" alt="Logo" class="h-20 mb-2"/>
-          <h1 class="text-lg font-semibold">Dolores Cerón De Esquivel</h1>
-          <p class="text-sm">Dirección…<br/>Giro…</p>
+    <!-- Contenido -->
+    <div class="flex-1 p-4 overflow-auto">
+      <form id="viewCredito" class="mx-auto w-full max-w-4xl bg-white p-6 shadow rounded-lg">
+        <h2 class="text-lg font-semibold text-center mb-4">Formulario Crédito Fiscal</h2>
+        <div class="grid md:grid-cols-2 gap-4 text-sm">
+          <label>Cliente<input id="cliente" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Fecha<input id="fecha" type="date" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Dirección<input id="direccion" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Municipio<input id="municipio" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Departamento<input id="departamento" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>NIT<input id="nit" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Registro<input id="registro" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Giro<input id="giro" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Nota Remisión<input id="nota_remision" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Fecha Nota<input id="fecha_nota" type="date" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Condición<input id="condicion" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Venta a cuenta de<input id="venta_cta_de" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
+          <label>Total literal<input id="total_literal" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/></label>
         </div>
-        <div class="flex flex-col items-center border rounded bg-gray-50 p-3">
-          <p class="font-semibold">COMPROBANTE CRÉDITO FISCAL</p>
-          <p class="text-4xl font-bold text-red-600">No. 0001</p>
-          <p class="text-sm">N.R.C.… NIT.…</p>
-        </div>
-      </header>
 
-      <!-- 2. Cliente y operación -->
-      <section class="mt-4 space-y-2 text-sm">
-        <div class="grid gap-4 md:grid-cols-2">
-          <label class="flex flex-col">
-            Cliente
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-          <label class="flex flex-col">
-            Fecha
-            <input type="date" readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
+        <div class="grid md:grid-cols-3 gap-4 mt-6 text-sm">
+          <label>Sumas<input id="suma" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>13% IVA<input id="iva13" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>Sub-Total<input id="sub_total" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>IVA Retenido<input id="iva_retenido" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>Ventas Exentas<input id="ventas_exentas" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>Ventas No Sujetas<input id="ventas_no_sujetas" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
+          <label>Venta Total<input id="venta_total" readonly class="w-full rounded border bg-gray-100 px-2 py-1 text-right"/></label>
         </div>
-        <label class="flex flex-col">
-          Dirección
-          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-        <div class="grid gap-4 md:grid-cols-4">
-          <label class="flex flex-col">
-            Municipio
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-          <label class="flex flex-col">
-            Depto.
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-          <label class="flex flex-col">
-            NIT
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-          <label class="flex flex-col">
-            Registro No.
-            <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-          </label>
-        </div>
-        <div class="grid gap-4 md:grid-cols-3 items-center">
-          <label class="flex items-center gap-2">
-            Contado <input type="radio" disabled/>
-          </label>
-          <label class="flex items-center gap-2">
-            Crédito <input type="radio" disabled/>
-          </label>
-        </div>
-        <label class="flex flex-col">
-          Venta a cta. de
-          <input readonly class="mt-1 w-full rounded border bg-gray-100 px-2 py-1"/>
-        </label>
-      </section>
 
-      <!-- 3. Detalle -->
-      <section class="mt-6">
-        <div class="overflow-x-auto">
+        <div class="grid md:grid-cols-2 gap-4 mt-6 text-sm">
+          <div>
+            <h3 class="font-semibold mb-2">Entregado por</h3>
+            <input id="entregado_nombre" placeholder="Nombre" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+            <input id="entregado_dui" placeholder="DUI" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+            <input id="entregado_firma" placeholder="Firma" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+          </div>
+          <div>
+            <h3 class="font-semibold mb-2">Recibido por</h3>
+            <input id="recibido_nombre" placeholder="Nombre" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+            <input id="recibido_dui" placeholder="DUI" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+            <input id="recibido_firma" placeholder="Firma" readonly class="w-full rounded border bg-gray-100 px-2 py-1"/>
+          </div>
+        </div>
+
+        <section class="mt-6">
           <table class="w-full text-xs">
-            <thead>
-              <tr class="bg-gray-800 text-white">
-                <th class="px-1 py-1">CANT</th>
-                <th class="px-1 py-1">DESCRIPCIÓN</th>
-                <th class="px-1 py-1">PRECIO UNIT.</th>
-                <th class="px-1 py-1">NO SUJETAS</th>
-                <th class="px-1 py-1">EXENTAS</th>
-                <th class="px-1 py-1">GRAVADAS</th>
+            <thead class="bg-gray-800 text-white text-left">
+              <tr>
+                <th class="px-2 py-1">CANT</th>
+                <th class="px-2 py-1">DESCRIPCIÓN</th>
+                <th class="px-2 py-1">PRECIO UNIT.</th>
+                <th class="px-2 py-1">NO SUJETAS</th>
+                <th class="px-2 py-1">EXENTAS</th>
+                <th class="px-2 py-1">GRAVADAS</th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Aquí se rellenará con JavaScript -->
-            </tbody>
+            <tbody id="detalleRows"></tbody>
           </table>
-        </div>
-      </section>
+        </section>
 
-      <!-- 4. Calificación -->
-      <div class="mt-6 flex items-center justify-between">
-        <label class="flex items-center gap-2">
-          Calificar:
-          <input id="nota" type="number" min="0" max="100" class="ml-2 w-20 rounded border px-2 py-1"/>
-        </label>
-        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Guardar calificación
-        </button>
-      </div>
-    </form>
+        <div class="mt-6 flex justify-between items-center">
+          <label class="flex items-center gap-2">Calificar:
+            <input id="nota" type="number" min="0" max="10" step="0.1" class="ml-2 w-24 rounded border px-2 py-1" />
+          </label>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar calificación</button>
+        </div>
+      </form>
+    </div>
   </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(location.search);
+    const tarea = params.get('tarea');
+    const alumno = params.get('alumno');
+    if (!tarea || !alumno) return;
+
+    try {
+      const res = await fetch(`http://localhost:4000/formulario/credito-fiscal/${tarea}/${alumno}`, {
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error al cargar');
+
+      // Función para dar formato YYYY-MM-DD
+      const toDate = val => val ? new Date(val).toISOString().split('T')[0] : '';
+
+      // Asignar campos individuales
+      const fields = {
+        cliente: data.cliente_nombre,
+        fecha: toDate(data.fecha),
+        direccion: data.direccion,
+        municipio: data.municipio,
+        departamento: data.departamento,
+        nit: data.nit,
+        registro: data.registro,
+        giro: data.giro,
+        nota_remision: data.nota_remision,
+        fecha_nota: toDate(data.fecha_nota),
+        condicion: data.condicion,
+        venta_cta_de: data.venta_cta_de,
+        total_literal: data.total_literal,
+        suma: data.suma,
+        iva13: data.iva13,
+        sub_total: data.sub_total,
+        iva_retenido: data.iva_retenido,
+        ventas_exentas: data.ventas_exentas,
+        ventas_no_sujetas: data.ventas_no_sujetas,
+        venta_total: data.venta_total,
+        entregado_nombre: data.entregado_nombre,
+        entregado_dui: data.entregado_dui,
+        entregado_firma: data.entregado_firma,
+        recibido_nombre: data.recibido_nombre,
+        recibido_dui: data.recibido_dui,
+        recibido_firma: data.recibido_firma,
+        nota: data.nota
+      };
+
+      for (const [id, value] of Object.entries(fields)) {
+        const input = document.getElementById(id);
+        if (input) input.value = value ?? '';
+      }
+
+      // Cargar detalles
+      const tbody = document.getElementById('detalleRows');
+      tbody.innerHTML = '';
+      data.detalles.forEach(det => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-2 py-1">${det.cantidad}</td>
+          <td class="px-2 py-1">${det.descripcion}</td>
+          <td class="px-2 py-1">${det.precio_unitario}</td>
+          <td class="px-2 py-1">${det.no_sujetas}</td>
+          <td class="px-2 py-1">${det.exentas}</td>
+          <td class="px-2 py-1">${det.gravadas}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+    } catch (err) {
+      console.error(err);
+      alert('Error al cargar los datos');
+    }
+  });
+
+  document.getElementById('viewCredito').addEventListener('submit', async e => {
+    e.preventDefault();
+    const nota = parseFloat(document.getElementById('nota').value);
+    const params = new URLSearchParams(location.search);
+    const tarea = params.get('tarea');
+    const alumno = params.get('alumno');
+
+    if (isNaN(nota) || nota < 0 || nota > 10)
+      return alert('La nota debe estar entre 0.0 y 10.0');
+
+    try {
+      const res = await fetch(`http://localhost:4000/calificar/credito-fiscal/${tarea}/${alumno}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ nota })
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Error al guardar');
+      alert('Nota guardada correctamente.');
+    } catch (err) {
+      console.error(err);
+      alert('Error al guardar la nota');
+    }
+  });
+</script>
+
 </body>
 </html>

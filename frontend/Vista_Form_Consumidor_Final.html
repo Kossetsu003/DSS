@@ -213,6 +213,14 @@
         detalles:        []
       };
 
+      // Totales
+      body.sumas         = parseFloat(document.getElementById('sumas').value) || 0;
+      body.ventaExenta   = parseFloat(document.getElementById('ventaExenta').value) || 0;
+      body.ventaNoSujeta = parseFloat(document.getElementById('ventaNoSujeta').value) || 0;
+      body.ivaRetenido   = parseFloat(document.getElementById('ivaRetenido').value) || 0;
+      body.ventaTotal    = parseFloat(document.getElementById('ventaTotal').value) || 0;
+
+
       // Validar cabecera
       for (let [k,v] of [
         ['dia',          body.dia],
