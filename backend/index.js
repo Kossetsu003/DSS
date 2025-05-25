@@ -54,7 +54,6 @@ app.post('/login', async (req, res) => {
     }
 
     const usuario = result.recordset[0];
-
     req.session.user = {
       id: usuario.id,
       rol: usuario.rol
